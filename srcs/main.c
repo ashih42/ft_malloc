@@ -11,7 +11,7 @@ int			main(void)
 
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
-		array_tiny[i] = ft_malloc(sizeof(char) * 5);
+		array_tiny[i] = ft_malloc(sizeof(char) * 16 * 3 + 4);
 		array_small[i] = ft_malloc(sizeof(char) * 0);
 	}
 

@@ -6,31 +6,11 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 05:45:40 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 07:26:46 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 08:53:49 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
-
-static void			hexdump(t_block *block)
-{
-	static char		*hextable = "0123456789abcdef";
-	size_t			i;
-	unsigned char	*c;
-
-	ft_printf("      HEXDUMP : ");
-	i = 0;
-	while (i < block->size)
-	{
-		c = (void *)block + sizeof(t_block) + i;
-		if (i > 0)
-			ft_putchar(' ');
-		ft_putchar(hextable[*c / 16]);
-		ft_putchar(hextable[*c % 16]);
-		i++;
-	}
-	ft_putchar('\n');
-}
 
 static void			print_blocks(t_block *block, int ex_mode)
 {

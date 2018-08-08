@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 08:21:38 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 08:44:22 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@
 # define ERROR_OPEN_FILE	"Cannot open file"
 # define ERROR_GL			"Some kind of OpenGL error"
 # define ERROR_SHADER		"Shader error"
+
+# define CHARS_PER_ROW		16
 
 /*
 ** 16 + (128 + 24) * 100 < 4 * 4096
@@ -175,6 +177,11 @@ void				key_callback(GLFWwindow *window,
 void				window_resize_callback(GLFWwindow *window,
 	int width, int height);
 void				error_callback(int error, const char *description);
+
+/*
+** hexdump.c
+*/
+void				hexdump(t_block *block);
 
 /*
 ** init_alloc.c

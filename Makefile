@@ -38,6 +38,7 @@ ft_realloc.c \
 gl_callback.c \
 gl_init.c \
 gl_init_shader.c \
+hexdump.c \
 init_alloc.c \
 render.c \
 show_alloc_mem.c \
