@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 07:17:04 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 08:12:21 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,6 @@ void			ft_free(void *ptr)
 	else
 		VERBOSE_PRINT("  fail!\n");
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.window)
-		usleep(SLEEP_TIME);
+	if (g_alloc.visual)
+		usleep(VISUAL_DELAY);
 }

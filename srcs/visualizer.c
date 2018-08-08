@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   visualize_th.c                                     :+:      :+:    :+:   */
+/*   visualizer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/08/07 22:16:56 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 07:26:20 by ashih            ###   ########.fr       */
+/*   Created: 2018/08/08 08:19:24 by ashih             #+#    #+#             */
+/*   Updated: 2018/08/08 08:21:24 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,4 @@ void	visualize_loop(void)
 		glfwSwapBuffers(g_alloc.window);
 		glfwPollEvents();
 	}
-}
-
-void	*visualize_th(void *arg)
-{
-	(void)arg;
-	visualize_loop();
-	free_visualizer();
-	return (NULL);
 }

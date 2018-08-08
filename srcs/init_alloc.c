@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 22:19:41 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 07:56:05 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 08:20:04 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@ t_alloc				g_alloc =
 
 static void			init_alloc(void)
 {
-	int				gl_success;
-
-	gl_success = 0;
 	if (g_alloc.visual)
-		gl_success = !gl_init();
+		g_alloc.visual = !gl_init();
 	pthread_create(&g_alloc.main_prog, NULL, MAIN_PROGRAM, NULL);
-	if (gl_success)
-		visualize_th(NULL);
+	if (g_alloc.visual)
+		visualize_loop();
+	free_visualizer();
 }
 
 PREMAIN_DEF			premain(void)

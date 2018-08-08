@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 07:51:22 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 08:21:38 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@
 
 #include <stdio.h> // REMOVE
 
-# define SLEEP_TIME			100000
+// HEY YOU SHOULD REMOVE -fsanitize in MAKEFILE
+
+# define VISUAL_DELAY		100000
 
 # define FRAME_WIDTH		1000
 # define FRAME_HEIGHT		10
@@ -190,9 +192,10 @@ void				show_alloc_mem(void);
 void				show_alloc_mem_ex(void);
 
 /*
-** visualize_th.c
+** visualizer.c
 */
-void				*visualize_th(void *arg);
+void				free_visualizer(void);
+void				visualize_loop(void);
 
 /*
 ** zone.c

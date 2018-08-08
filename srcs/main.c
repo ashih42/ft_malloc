@@ -12,7 +12,7 @@ int			main(void)
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
 		array_tiny[i] = ft_malloc(sizeof(char) * 5);
-		//array_small[i] = ft_malloc(sizeof(char) * 129);
+		array_small[i] = ft_malloc(sizeof(char) * 0);
 	}
 
 	array_tiny[0][0] = 'A';

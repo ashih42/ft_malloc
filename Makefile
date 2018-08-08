@@ -41,7 +41,7 @@ gl_init_shader.c \
 init_alloc.c \
 render.c \
 show_alloc_mem.c \
-visualize_th.c \
+visualizer.c \
 zone.c
 
 SRCDIR := srcs/
