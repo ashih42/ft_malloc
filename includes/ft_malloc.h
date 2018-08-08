@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 07:39:35 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 07:51:22 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct		s_alloc
 	int				*frame;
 
 	int				verbose;
+	int				visual;
 
 }					t_alloc;
 
