@@ -6,13 +6,13 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 22:22:13 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 01:57:51 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 07:28:52 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
 
-void			draw_block(t_block *block, t_zone *zone, int index)
+static void		draw_block(t_block *block, t_zone *zone, int index)
 {
 	int			y_top;
 	int			x_start;
@@ -25,15 +25,16 @@ void			draw_block(t_block *block, t_zone *zone, int index)
 	if (block->free)
 		return ;
 	if (block->next)
-		x_len = FRAME_MARGIN + (int)CHANGE(((size_t)block->next),((size_t)zone),
-			((size_t)zone->end), 0, (FRAME_WIDTH)) - x_start;
+		x_len = FRAME_MARGIN + (int)CHANGE(((size_t)block->next),
+			((size_t)zone), ((size_t)zone->end), 0, (FRAME_WIDTH)) - x_start;
 	else
 		x_len = FRAME_WIDTH - x_start;
 	x_len = MAX(x_len, 1);
-	draw_sq((t_vect2i){x_start, y_top}, (t_vect2i){x_len, FRAME_HEIGHT}, 0xFF0000);
+	draw_sq((t_vect2i){x_start, y_top}, (t_vect2i){x_len, FRAME_HEIGHT},
+		0xFF0000);
 }
 
-void			draw_zone(t_zone *zone, int index)
+static void		draw_zone(t_zone *zone, int index)
 {
 	int			y_top;
 	t_block		*block;
@@ -47,23 +48,28 @@ void			draw_zone(t_zone *zone, int index)
 		draw_block(block, zone, index);
 		block = block->next;
 	}
-	draw_box((t_vect2i){FRAME_MARGIN, y_top}, (t_vect2i){FRAME_WIDTH, FRAME_HEIGHT}, 0xFFFFFF);
+	draw_box((t_vect2i){FRAME_MARGIN, y_top},
+		(t_vect2i){FRAME_WIDTH, FRAME_HEIGHT}, index < 3 ? 0xFFFFFF : 0x00FFFF);
 }
 
-
-void		render(void)
+void			render(void)
 {
-	int		index;
-	t_zone	*zone;
+	int			index;
+	t_zone		*zone;
 
+	ft_bzero(g_alloc.frame, sizeof(int) * (WIN_WIDTH) * (WIN_HEIGHT));
 	index = 0;
-	ft_bzero(g_alloc.frame, sizeof(int) * WIN_WIDTH * WIN_HEIGHT);
 	zone = g_alloc.zone[TINY];
-
 	while (zone && index < 3)
 	{
 		draw_zone(zone, index++);
 		zone = zone->next;
 	}
-
+	index = 3;
+	zone = g_alloc.zone[SMALL];
+	while (zone && index < 6)
+	{
+		draw_zone(zone, index++);
+		zone = zone->next;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:31:46 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 01:26:41 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 07:04:26 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,23 @@
 ** (x, y) MUST already be within valid range
 */
 
-void		draw_dot(int x, int y, int color)
+static void		draw_dot(int x, int y, int color)
 {
 	g_alloc.frame[x + y * WIN_WIDTH] = color;
 }
 
-void		draw_line_horiz(t_vect2i pos, int len, int color)
+static void		draw_line_horiz(t_vect2i pos, int len, int color)
 {
-	int		x;
+	int			x;
 
 	x = 0;
 	while (x < len)
 		draw_dot(pos.x + x++, pos.y, color);
 }
 
-void		draw_line_vert(t_vect2i pos, int len, int color)
+void			draw_line_vert(t_vect2i pos, int len, int color)
 {
-	int		y;
+	int			y;
 
 	y = 0;
 	while (y < len)
@@ -49,7 +49,6 @@ void		draw_line_vert(t_vect2i pos, int len, int color)
 ** y, height
 */
 
-// given upper-left corner pos
 void			draw_box(t_vect2i upper_left, t_vect2i dimen, int color)
 {
 	t_vect2i	upper_right;
@@ -59,17 +58,14 @@ void			draw_box(t_vect2i upper_left, t_vect2i dimen, int color)
 	upper_right.y = upper_left.y;
 	bottom_left.x = upper_left.x;
 	bottom_left.y = upper_left.y + dimen.y - 1;
-
 	draw_line_horiz(upper_left, dimen.x, color);
-	//draw_line_vert(upper_left, dimen.y, color);
 	draw_line_horiz(bottom_left, dimen.x, color);
 	draw_line_vert(upper_right, dimen.y, color);
 }
 
-
-void		draw_sq(t_vect2i pos, t_vect2i dimen, int color)
+void			draw_sq(t_vect2i pos, t_vect2i dimen, int color)
 {
-	int		y;
+	int			y;
 
 	y = 0;
 	while (y < dimen.y)

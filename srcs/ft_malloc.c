@@ -6,19 +6,22 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 21:04:56 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 03:14:54 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 07:15:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
+
+/*
+** Case (1): block is the last block in this zone
+** Case (2): block is NOT the last block in this zone
+*/
 
 static void		init_next_block(t_zone *zone, t_block *block)
 {
 	t_block		*next;
 
 	next = (void *)block + sizeof(t_block) + block->size;
-
-	// this is the last block in this zone
 	if (!block->next && (void *)next + sizeof(t_block) <= zone->end)
 	{
 		block->next = next;
@@ -26,8 +29,8 @@ static void		init_next_block(t_zone *zone, t_block *block)
 		next->free = 1;
 		next->next = NULL;
 	}
-	// this is a middle block in this zone
-	else if (block->next && (void *)next + sizeof(t_block) <= (void *)block->next)
+	else if (block->next && (void *)next + sizeof(t_block) <=
+		(void *)block->next)
 	{
 		next->size = (void *)block->next - ((void *)next + sizeof(t_block));
 		next->free = 1;
@@ -65,7 +68,6 @@ static void		*malloc_at_zone(size_t size, int zid)
 	t_zone		*zone;
 
 	ret = find_space(g_alloc.zone[zid], size);
-
 	if (!ret)
 	{
 		if (zid == TINY)
@@ -73,16 +75,16 @@ static void		*malloc_at_zone(size_t size, int zid)
 		else if (zid == SMALL)
 			zone = add_zone(&g_alloc.zone[zid], new_zone(LARGE_ZONE_SIZE));
 		else
-			zone = add_zone(&g_alloc.zone[zid], new_zone(size + sizeof(t_block) + sizeof(t_zone)));
-		
+			zone = add_zone(&g_alloc.zone[zid], new_zone(
+				size + sizeof(t_block) + sizeof(t_zone)));
 		if (!zone)
 			return (NULL);
 		ret = find_space(g_alloc.zone[zid], size);
 	}
-	return (ret);	
+	return (ret);
 }
 
-void		*ft_malloc(size_t size)
+void			*ft_malloc(size_t size)
 {
 	void		*ret;
 
@@ -99,10 +101,8 @@ void		*ft_malloc(size_t size)
 			ret = malloc_at_zone(size, LARGE);
 		pthread_mutex_unlock(&g_alloc.mutex);
 	}
-
-	ft_printf("ft_malloc ( size=%lu ) : %p\n", size, ret);
+	VERBOSE_PRINT("ft_malloc ( size=%lu ) : %p\n", size, ret);
 	if (g_alloc.window)
 		usleep(SLEEP_TIME);
-
 	return (ret);
 }

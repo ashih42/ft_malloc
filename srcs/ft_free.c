@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 05:14:57 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 07:17:04 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@
 ** Defragment (merge adjacent FREE blocks)
 ** Merge curr with next, and curr with prev, if all are marked FREE
 */
+
 static void		merge(t_block *prev, t_block *curr)
 {
 	curr->free = 1;
-
-	// merge curr and next
 	if (curr->next && curr->next->free)
 	{
 		curr->size += sizeof(t_block) + curr->next->size;
 		curr->next = curr->next->next;
 	}
-
-	// merge prev and curr
 	if (prev && prev->free)
 	{
 		prev->size += sizeof(t_block) + curr->size;
@@ -35,7 +32,7 @@ static void		merge(t_block *prev, t_block *curr)
 	}
 }
 
-static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
+static int		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 {
 	t_block		*block;
 
@@ -43,7 +40,7 @@ static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 	while (block)
 	{
 		if (block->free == 0)
-			return ;
+			return (1);
 		block = block->next;
 	}
 	if (prev)
@@ -51,11 +48,11 @@ static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 	else
 		*head = zone->next;
 	munmap(zone, (size_t)(zone->end - (void *)zone));
+	return (1);
 }
 
 static int		free_at_zone(void *ptr, t_zone **head)
 {
-
 	t_zone		*zone;
 	t_zone		*prev_zone;
 	t_block		*prev;
@@ -63,7 +60,7 @@ static int		free_at_zone(void *ptr, t_zone **head)
 
 	zone = *head;
 	prev_zone = NULL;
-	while(zone)
+	while (zone)
 	{
 		prev = NULL;
 		block = (void *)zone + sizeof(t_zone);
@@ -72,8 +69,7 @@ static int		free_at_zone(void *ptr, t_zone **head)
 			if ((void *)block + sizeof(t_block) == ptr && !block->free)
 			{
 				merge(prev, block);
-				release_zone(head, zone, prev_zone);
-				return (1);
+				return (release_zone(head, zone, prev_zone));
 			}
 			prev = block;
 			block = block->next;
@@ -96,32 +92,33 @@ static int		free_at_large_zone(void *ptr, t_zone **head)
 	{
 		block = (void *)zone + sizeof(t_zone);
 		if ((void *)block + sizeof(t_block) == ptr)
-			break;
+			break ;
 		prev = zone;
 		zone = zone->next;
 	}
 	if (!zone)
 		return (0);
-
 	release_zone(head, zone, prev);
 	return (1);
 }
 
 void			ft_free(void *ptr)
 {
-	ft_printf("ft_free ( ptr=%p )", ptr);
+	VERBOSE_PRINT("ft_free ( ptr=%p )", ptr);
 	if (!ptr)
 	{
-		ft_printf("  (╯°□°）╯︵ ┻━┻\n");
-		return;
+		VERBOSE_PRINT("  (╯°□°）╯︵ ┻━┻\n");
+		return ;
 	}
 	pthread_mutex_lock(&g_alloc.mutex);
 	if (free_at_zone(ptr, &g_alloc.zone[TINY]) ||
 		free_at_zone(ptr, &g_alloc.zone[SMALL]) ||
 		free_at_large_zone(ptr, &g_alloc.zone[LARGE]))
-		ft_printf("  success!\n");
+	{
+		VERBOSE_PRINT("  success!\n");
+	}
 	else
-		ft_printf("  fail!\n");
+		VERBOSE_PRINT("  fail!\n");
 	pthread_mutex_unlock(&g_alloc.mutex);
 	if (g_alloc.window)
 		usleep(SLEEP_TIME);

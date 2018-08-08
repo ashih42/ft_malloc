@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/05 23:27:25 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/07 23:48:44 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 07:16:14 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int		gl_init_objs(void)
 	const unsigned int	indices[] = {
 		0, 1, 3,
 		1, 2, 3 };
-	
+
 	glGenVertexArrays(1, &g_alloc.vao);
 	glBindVertexArray(g_alloc.vao);
 	glGenBuffers(1, &g_alloc.vbo);
@@ -62,7 +62,7 @@ static int		gl_kickstart(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	g_alloc.window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, WIN_NAME, NULL, NULL);
+	g_alloc.window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, WIN_NAME, 0, 0);
 	if (!g_alloc.window)
 		return (ft_puterror(ERROR_GL, 0, 1));
 	glfwMakeContextCurrent(g_alloc.window);

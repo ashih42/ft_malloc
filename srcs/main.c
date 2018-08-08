@@ -1,29 +1,45 @@
 #include "ft_malloc.h"
 
-# define ARR_SIZE 150
+# define ARR_SIZE 5
 
 int			main(void)
 {
 	srand(time(NULL));
-//	ft_printf("\nmain()\n");
-
-
 	
-	char *array[ARR_SIZE];
+	char *array_tiny[ARR_SIZE];
+	char *array_small[ARR_SIZE];
 
 	for (int i = 0; i < ARR_SIZE; i++)
-		array[i] = ft_malloc(sizeof(char) * 128);
+	{
+		array_tiny[i] = ft_malloc(sizeof(char) * 5);
+		//array_small[i] = ft_malloc(sizeof(char) * 129);
+	}
+
+	array_tiny[0][0] = 'A';
+	array_tiny[0][1] = 'B';
+	array_tiny[0][2] = '1';
+	array_tiny[0][3] = '2';
+	array_tiny[0][4] = 'z';
+	
+	//show_alloc_mem();
+	show_alloc_mem_ex();
+
+	sleep(3);
 
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
 		int j = rand() % ARR_SIZE;
-		SWAP(array[i], array[j], char *);
+		SWAP(array_tiny[i], array_tiny[j], char *);
+		SWAP(array_small[i], array_small[j], char *);
 	}
 
 	for (int i = 0; i < ARR_SIZE; i++)
-		ft_free(array[i]);
+	{
+		ft_free(array_tiny[i]);
+		ft_free(array_small[i]);
+	}
 	
-//	ft_printf("\nLA FINI\n");
+
 
 
 

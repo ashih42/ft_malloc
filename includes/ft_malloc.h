@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_malloc.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
+/*   Updated: 2018/08/08 07:39:35 by ashih            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_MALLOC_H
 # define FT_MALLOC_H
 
@@ -10,37 +22,34 @@
 
 #include <stdio.h> // REMOVE
 
-# define SLEEP_TIME					100000
+# define SLEEP_TIME			100000
 
-# define FRAME_WIDTH				1000
-# define FRAME_HEIGHT				10
-# define FRAME_MARGIN				10
+# define FRAME_WIDTH		1000
+# define FRAME_HEIGHT		10
+# define FRAME_MARGIN		10
 
-# define WIN_WIDTH				(FRAME_WIDTH + FRAME_MARGIN * 2)
-# define WIN_HEIGHT				(FRAME_HEIGHT * 3 + FRAME_MARGIN * 4)
+# define WIN_WIDTH			(FRAME_WIDTH + FRAME_MARGIN * 2)
+# define WIN_HEIGHT			(FRAME_HEIGHT * 6 + FRAME_MARGIN * 7)
 
-# define WIN_NAME				"FT_MALLOC VISUALIZER"
-# define ERROR_MEMORY			"Out of memory"
-# define ERROR_OPEN_FILE		"Cannot open file"
-# define ERROR_GL				"Some kind of OpenGL error"
-# define ERROR_SHADER			"Shader error"
+# define WIN_NAME			"FT_MALLOC VISUALIZER"
+# define ERROR_MEMORY		"Out of memory"
+# define ERROR_OPEN_FILE	"Cannot open file"
+# define ERROR_GL			"Some kind of OpenGL error"
+# define ERROR_SHADER		"Shader error"
 
-# define SMALL_ZONE_SIZE	getpagesize() * 4
-# define SMALL_SIZE_CUTOFF	128
 /*
 ** 16 + (128 + 24) * 100 < 4 * 4096
 ** 15216 < 16384
 */
+# define SMALL_ZONE_SIZE	getpagesize() * 4
+# define SMALL_SIZE_CUTOFF	128
 
-# define LARGE_ZONE_SIZE	getpagesize() * 26
-# define LARGE_SIZE_CUTOFF	1024
 /*
 ** 16 + (1024 + 24) * 100 < 26 * 4096
 ** 104816 < 106496
 */
-
-# define ENV_MALLOC			"MALLOC_DEBUG"
-# define ENV_BLOCKS			"BLOCKS_DEBUG"
+# define LARGE_ZONE_SIZE	getpagesize() * 26
+# define LARGE_SIZE_CUTOFF	1024
 
 # define MAIN_PROGRAM		((void *(*)(void *))main)
 
@@ -53,6 +62,11 @@
 */
 # define CHANGE(x, min, max, a, b) (((b)-(a))*((x)-(min))/((max)-(min)))+(a)
 
+# define VERBOSE_PRINT(...)	if (g_alloc.verbose) ft_printf(__VA_ARGS__)
+
+# define KEY_CALLBACK_ARGS int key, int scancode, int action, int mods
+
+# define PREMAIN_DEF void __attribute__ ((constructor))
 
 typedef struct		s_vect2i
 {
@@ -86,7 +100,6 @@ enum				e_zone
 	LARGE
 };
 
-
 typedef struct		s_alloc
 {
 	t_zone			*zone[3];
@@ -98,111 +111,92 @@ typedef struct		s_alloc
 	unsigned int	shader_prog;
 	unsigned int	vao;
 	unsigned int	vbo;
-	unsigned int	ebo;	
+	unsigned int	ebo;
 	unsigned int	frame_tex;
-
 	int				*frame;
+
+	int				verbose;
 
 }					t_alloc;
 
 extern t_alloc		g_alloc;
 
-
 int					main();
-
-
-
-
-/*
-** REQUIRED FUNCTIONS
-*/
-void			show_alloc_mem(void);
-void			show_alloc_mem_ex(void);
-
-
 
 /*
 ** debug.c
 */
-void			print_alloc(void);
-
 
 /*
 ** draw.c
 */
-void			draw_line_vert(t_vect2i pos, int len, int color);
-void			draw_box(t_vect2i upper_left, t_vect2i dimen, int color);
-void			draw_sq(t_vect2i pos, t_vect2i dimen, int color);
-
+void				draw_line_vert(t_vect2i pos, int len, int color);
+void				draw_box(t_vect2i upper_left, t_vect2i dimen, int color);
+void				draw_sq(t_vect2i pos, t_vect2i dimen, int color);
 
 /*
 ** ft_calloc.c
 */
-void			*ft_calloc(size_t count, size_t size);
+void				*ft_calloc(size_t count, size_t size);
 
 /*
 ** ft_free.c
 */
-void			ft_free(void *ptr);
+void				ft_free(void *ptr);
 
 /*
 ** ft_malloc.c
 */
-void			*ft_malloc(size_t size);
+void				*ft_malloc(size_t size);
 
 /*
 ** ft_realloc.c
 */
-void			*ft_realloc(void *ptr, size_t size);
-
+void				*ft_realloc(void *ptr, size_t size);
 
 /*
 ** gl_init.c
 */
-int				gl_init(void);
+int					gl_init(void);
 
 /*
 ** gl_init_shader.c
 */
-int				gl_init_shader(void);
+int					gl_init_shader(void);
 
 /*
 ** gl_callback.c
 */
-void			key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void			window_resize_callback(GLFWwindow* window, int width, int height);
-void			error_callback(int error, const char *description);
+void				key_callback(GLFWwindow *window,
+	int key, int scancode, int action, int mods);
+void				window_resize_callback(GLFWwindow *window,
+	int width, int height);
+void				error_callback(int error, const char *description);
 
 /*
 ** init_alloc.c
 */
-void			init_alloc(void);
 
 /*
 ** render.c
 */
-void			render(void);
+void				render(void);
+
+/*
+** show_alloc_mem.c
+*/
+void				show_alloc_mem(void);
+void				show_alloc_mem_ex(void);
 
 /*
 ** visualize_th.c
 */
-void			*visualize_th(void *arg);
-
-
+void				*visualize_th(void *arg);
 
 /*
 ** zone.c
 */
-void			*new_zone(size_t size);
-void			*add_zone(t_zone **zone, t_zone *new);
-
-
-
-
-
-
-
-
-
+void				*new_zone(size_t size);
+void				*add_zone(t_zone **zone, t_zone *new);
 
 #endif
