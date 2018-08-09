@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 20:29:19 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 22:38:25 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:40:41 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,11 @@ void			free(void *ptr)
 	VERBOSE_PRINT("free ( ptr=%p )", ptr);
 	ret = ft_free(ptr, &size);
 	if (ret == 1)
-	{
 		VERBOSE_PRINT(" Success! ( Released %lu bytes )\n", size);
-	}
 	else if (ret == 0)
-	{
 		VERBOSE_PRINT(" Fail!\n");
-	}
 	else
-	{
 		VERBOSE_PRINT(" (╯°□°）╯︵ ┻━┻\n");
-	}
 	pthread_mutex_unlock(&g_alloc.mutex);
 	VIS_DELAY;
 }
