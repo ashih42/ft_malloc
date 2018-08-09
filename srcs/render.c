@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 22:22:13 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 07:28:52 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:28:06 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ void			render(void)
 	ft_bzero(g_alloc.frame, sizeof(int) * (WIN_WIDTH) * (WIN_HEIGHT));
 	index = 0;
 	zone = g_alloc.zone[TINY];
-	while (zone && index < 3)
+	while (zone && index < BLOCKS_DISPLAYED)
 	{
 		draw_zone(zone, index++);
 		zone = zone->next;
 	}
-	index = 3;
+	index = BLOCKS_DISPLAYED;
 	zone = g_alloc.zone[SMALL];
-	while (zone && index < 6)
+	while (zone && index < (BLOCKS_DISPLAYED * 2))
 	{
 		draw_zone(zone, index++);
 		zone = zone->next;

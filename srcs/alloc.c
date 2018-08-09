@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 20:29:19 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 22:20:05 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:38:25 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,33 +20,32 @@ void			*malloc(size_t size)
 	ret = ft_malloc(size);
 	VERBOSE_PRINT("malloc ( size=%lu ) : %p\n", size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual && g_alloc.main)
-		usleep(VISUAL_DELAY);
+	VIS_DELAY;
 	return (ret);
 }
 
 void			free(void *ptr)
 {
 	int			ret;
+	size_t		size;
 
 	pthread_mutex_lock(&g_alloc.mutex);
 	VERBOSE_PRINT("free ( ptr=%p )", ptr);
-	ret = ft_free(ptr);
+	ret = ft_free(ptr, &size);
 	if (ret == 1)
 	{
-		VERBOSE_PRINT("  success!\n");
+		VERBOSE_PRINT(" Success! ( Released %lu bytes )\n", size);
 	}
 	else if (ret == 0)
 	{
-		VERBOSE_PRINT("  fail!\n");
+		VERBOSE_PRINT(" Fail!\n");
 	}
 	else
 	{
-		VERBOSE_PRINT("  (╯°□°）╯︵ ┻━┻\n");
+		VERBOSE_PRINT(" (╯°□°）╯︵ ┻━┻\n");
 	}
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual && g_alloc.main)
-		usleep(VISUAL_DELAY);
+	VIS_DELAY;
 }
 
 void			*calloc(size_t count, size_t size)
@@ -60,23 +59,22 @@ void			*calloc(size_t count, size_t size)
 	VERBOSE_PRINT("calloc ( count=%lu , size=%lu ) : ret\n",
 		count, size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual && g_alloc.main)
-		usleep(VISUAL_DELAY);
+	VIS_DELAY;
 	return (ret);
 }
 
 void			*realloc(void *ptr, size_t size)
 {
 	void		*ret;
+	size_t		freed_size;
 
 	pthread_mutex_lock(&g_alloc.mutex);
 	ret = ft_malloc(size);
 	if (ret && ptr)
 		ft_memcpy(ret, ptr, size);
-	ft_free(ptr);
+	ft_free(ptr, &freed_size);
 	VERBOSE_PRINT("realloc ( ptr=%p , size=%lu ) : ret\n", ptr, size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual && g_alloc.main)
-		usleep(VISUAL_DELAY);
+	VIS_DELAY;
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 20:44:37 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:34:51 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 	munmap(zone, (size_t)(zone->end - (void *)zone));
 }
 
-static int		free_at_zone(void *ptr, t_zone **head)
+static int		free_at_zone(void *ptr, t_zone **head, size_t *size)
 {
 	FREE_ARGS;
 	while (zone)
@@ -63,6 +63,7 @@ static int		free_at_zone(void *ptr, t_zone **head)
 			{
 				if ((void *)block + sizeof(t_block) == ptr && !block->free)
 				{
+					*size = block->size;
 					merge(prev, block);
 					release_zone(head, zone, prev_zone);
 					return (1);
@@ -77,7 +78,7 @@ static int		free_at_zone(void *ptr, t_zone **head)
 	return (0);
 }
 
-static int		free_at_large_zone(void *ptr, t_zone **head)
+static int		free_at_large_zone(void *ptr, t_zone **head, size_t *size)
 {
 	t_zone		*zone;
 	t_zone		*prev;
@@ -95,6 +96,7 @@ static int		free_at_large_zone(void *ptr, t_zone **head)
 	}
 	if (!zone)
 		return (0);
+	*size = block->size;
 	release_zone(head, zone, prev);
 	return (1);
 }
@@ -105,13 +107,13 @@ static int		free_at_large_zone(void *ptr, t_zone **head)
 ** Return -1 if ptr is NULL
 */
 
-int				ft_free(void *ptr)
+int				ft_free(void *ptr, size_t *size)
 {
 	if (!ptr)
 		return (-1);
-	else if (free_at_zone(ptr, &g_alloc.zone[TINY]) ||
-		free_at_zone(ptr, &g_alloc.zone[SMALL]) ||
-		free_at_large_zone(ptr, &g_alloc.zone[LARGE]))
+	else if (free_at_zone(ptr, &g_alloc.zone[TINY], size) ||
+		free_at_zone(ptr, &g_alloc.zone[SMALL], size) ||
+		free_at_large_zone(ptr, &g_alloc.zone[LARGE], size))
 		return (1);
 	else
 		return (0);

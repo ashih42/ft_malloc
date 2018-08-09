@@ -1,6 +1,6 @@
 #include "ft_malloc.h"
 
-# define ARR_SIZE 5
+# define ARR_SIZE 20
 
 int			main(void)
 {

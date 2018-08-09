@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 22:20:02 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:34:53 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,15 @@
 
 // HEY YOU SHOULD REMOVE -fsanitize in MAKEFILE
 
-# define VISUAL_DELAY		100000
-
 # define FRAME_WIDTH		1000
 # define FRAME_HEIGHT		10
 # define FRAME_MARGIN		10
 
-# define WIN_WIDTH			(FRAME_WIDTH + FRAME_MARGIN * 2)
-# define WIN_HEIGHT			(FRAME_HEIGHT * 6 + FRAME_MARGIN * 7)
+# define BLOCKS_DISPLAYED	5
+
+# define WIN_WIDTH		(FRAME_WIDTH + FRAME_MARGIN * 2)
+# define WIN_HEIGHT		(FRAME_MARGIN + WIN_HEIGHT_2)
+# define WIN_HEIGHT_2	((FRAME_HEIGHT + FRAME_MARGIN) * BLOCKS_DISPLAYED * 2)
 
 # define WIN_NAME			"FT_MALLOC VISUALIZER"
 # define ERROR_MEMORY		"Out of memory"
@@ -74,6 +75,8 @@
 
 # define FREE_ARGS	t_zone *zone = *head; t_zone *prev_zone = 0; FREE_ARGS_2
 # define FREE_ARGS_2	t_block *prev; t_block *block
+
+# define VIS_DELAY if (g_alloc.visual && g_alloc.main) usleep(100000)
 
 typedef struct		s_vect2i
 {
@@ -151,24 +154,14 @@ void				draw_box(t_vect2i upper_left, t_vect2i dimen, int color);
 void				draw_sq(t_vect2i pos, t_vect2i dimen, int color);
 
 /*
-** ft_calloc.c
-*/
-//void				*ft_calloc(size_t count, size_t size);
-
-/*
 ** ft_free.c
 */
-int					ft_free(void *ptr);
+int					ft_free(void *ptr, size_t *size);
 
 /*
 ** ft_malloc.c
 */
 void				*ft_malloc(size_t size);
-
-/*
-** ft_realloc.c
-*/
-//void				*ft_realloc(void *ptr, size_t size);
 
 /*
 ** gl_init.c
