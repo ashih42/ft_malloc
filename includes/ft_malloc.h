@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 19:35:22 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 20:42:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,12 @@ extern t_alloc		g_alloc;
 int					main();
 
 /*
-** debug.c
+** alloc.c
 */
+void				*malloc(size_t size);
+void				free(void *ptr);
+void				*calloc(size_t count, size_t size);
+void				*realloc(void *ptr, size_t size);
 
 /*
 ** draw.c
@@ -148,12 +152,12 @@ void				draw_sq(t_vect2i pos, t_vect2i dimen, int color);
 /*
 ** ft_calloc.c
 */
-void				*ft_calloc(size_t count, size_t size);
+//void				*ft_calloc(size_t count, size_t size);
 
 /*
 ** ft_free.c
 */
-void				ft_free(void *ptr);
+int					ft_free(void *ptr);
 
 /*
 ** ft_malloc.c
@@ -163,7 +167,7 @@ void				*ft_malloc(size_t size);
 /*
 ** ft_realloc.c
 */
-void				*ft_realloc(void *ptr, size_t size);
+//void				*ft_realloc(void *ptr, size_t size);
 
 /*
 ** gl_init.c

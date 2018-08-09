@@ -1,6 +1,6 @@
 #include "ft_malloc.h"
 
-# define ARR_SIZE 150
+# define ARR_SIZE 10
 
 int			main(void)
 {
@@ -11,8 +11,8 @@ int			main(void)
 
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
-		array_tiny[i] = ft_malloc(sizeof(char) * 128);
-		array_small[i] = ft_malloc(sizeof(char) * 1024);
+		array_tiny[i] = malloc(sizeof(char) * 128);
+		array_small[i] = malloc(sizeof(char) * 1024);
 	}
 
 	// array_tiny[0][0] = 'A';
@@ -35,8 +35,8 @@ int			main(void)
 
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
-		ft_free(array_tiny[i]);
-		ft_free(array_small[i]);
+		free(array_tiny[i]);
+		free(array_small[i]);
 	}
 	
 

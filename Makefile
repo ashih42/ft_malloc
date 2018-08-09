@@ -29,12 +29,10 @@ DLFLAGS := -shared -fPIC
 LINK_TARGET := libft_malloc.so
 
 SRCS := main.c \
-debug.c \
+alloc.c \
 draw.c \
 ft_free.c \
-ft_calloc.c \
 ft_malloc.c \
-ft_realloc.c \
 gl_callback.c \
 gl_init.c \
 gl_init_shader.c \

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 21:04:56 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 08:12:26 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 20:35:51 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,11 @@ void			*ft_malloc(size_t size)
 
 	if (size == 0)
 		ret = NULL;
+	else if (size <= SMALL_SIZE_CUTOFF)
+		ret = malloc_at_zone(size, TINY);
+	else if (size <= LARGE_SIZE_CUTOFF)
+		ret = malloc_at_zone(size, SMALL);
 	else
-	{
-		pthread_mutex_lock(&g_alloc.mutex);
-		if (size <= SMALL_SIZE_CUTOFF)
-			ret = malloc_at_zone(size, TINY);
-		else if (size <= LARGE_SIZE_CUTOFF)
-			ret = malloc_at_zone(size, SMALL);
-		else
-			ret = malloc_at_zone(size, LARGE);
-		pthread_mutex_unlock(&g_alloc.mutex);
-	}
-	VERBOSE_PRINT("ft_malloc ( size=%lu ) : %p\n", size, ret);
-	if (g_alloc.visual)
-		usleep(VISUAL_DELAY);
+		ret = malloc_at_zone(size, LARGE);
 	return (ret);
 }

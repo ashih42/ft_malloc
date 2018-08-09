@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 08:20:04 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 20:11:11 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 21:00:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,13 @@ PREMAIN_DEF			premain(void)
 	g_alloc.verbose = ft_strequ(getenv("MALLOC_VERBOSE"), "1");
 	g_alloc.visual = ft_strequ(getenv("MALLOC_VISUAL"), "1");
 	if (g_alloc.visual)
+	{
+		ft_printf("{bold}{red}Initializing malloc visualizer...{reset}\n");
 		g_alloc.visual = !gl_init();
+	}
 	if (g_alloc.visual)
 	{
+		ft_printf("{bold}{red}Now executing main()...{reset}\n");
 		pthread_create(&g_alloc.main_prog, NULL, MAIN_PROGRAM, NULL);
 		visualize_loop();
 		free_visualizer();

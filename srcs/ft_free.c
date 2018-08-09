@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 18:07:45 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 20:44:37 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,24 +99,20 @@ static int		free_at_large_zone(void *ptr, t_zone **head)
 	return (1);
 }
 
-void			ft_free(void *ptr)
+/*
+** Return 1 if ptr is found and freed successfully
+** Return 0 if ptr is not found
+** Return -1 if ptr is NULL
+*/
+
+int				ft_free(void *ptr)
 {
-	VERBOSE_PRINT("ft_free ( ptr=%p )", ptr);
 	if (!ptr)
-	{
-		VERBOSE_PRINT("  (╯°□°）╯︵ ┻━┻\n");
-		return ;
-	}
-	pthread_mutex_lock(&g_alloc.mutex);
-	if (free_at_zone(ptr, &g_alloc.zone[TINY]) ||
+		return (-1);
+	else if (free_at_zone(ptr, &g_alloc.zone[TINY]) ||
 		free_at_zone(ptr, &g_alloc.zone[SMALL]) ||
 		free_at_large_zone(ptr, &g_alloc.zone[LARGE]))
-	{
-		VERBOSE_PRINT("  success!\n");
-	}
+		return (1);
 	else
-		VERBOSE_PRINT("  fail!\n");
-	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual)
-		usleep(VISUAL_DELAY);
+		return (0);
 }
