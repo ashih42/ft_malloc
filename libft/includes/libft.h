@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/02/02 19:58:05 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 18:51:52 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+
+# define ERROR_MEMORY	"Out of memory"
 
 /*
 ** Part 1 - Libc Functions
@@ -150,5 +152,11 @@ int					get_next_line(const int fd, char **line);
 ** ft_printf.c
 */
 int					ft_printf(const char *format, ...);
+
+/*
+** ft_open.c
+*/
+int					init_argv0_path(char *argv0, char **argv0_path);
+int					ft_open(char *argv0_path, char *file, int flags);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 08:44:22 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 19:35:22 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@
 
 # define PREMAIN_DEF void __attribute__ ((constructor))
 
+# define FREE_ARGS	t_zone *zone = *head; t_zone *prev_zone = 0; FREE_ARGS_2
+# define FREE_ARGS_2	t_block *prev; t_block *block
+
 typedef struct		s_vect2i
 {
 	int				x;
@@ -121,6 +124,9 @@ typedef struct		s_alloc
 
 	int				verbose;
 	int				visual;
+
+	char			*vertex_shader;
+	char			*fragment_shader;
 
 }					t_alloc;
 
@@ -184,7 +190,7 @@ void				error_callback(int error, const char *description);
 void				hexdump(t_block *block);
 
 /*
-** init_alloc.c
+** premain.c
 */
 
 /*

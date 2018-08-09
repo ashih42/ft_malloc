@@ -6,7 +6,7 @@
 #    By: ashih <ashih@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/04/10 06:02:44 by ashih            ###   ########.fr        #
+#    Updated: 2018/08/08 18:46:50 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRCS = del_and_gnl.c\
 	  ft_memmove.c\
 	  ft_memset.c\
 	  ft_min.c\
+	  ft_open.c\
 	  ft_print_bits.c\
 	  ft_print_char_array.c\
 	  ft_printf.c\
