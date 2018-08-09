@@ -6,14 +6,17 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 08:19:24 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 08:21:24 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:05:10 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
 
-void	free_visualizer(void)
+void	free_visualizer(int silent)
 {
+	if (!silent)
+		ft_printf("{bold}{red}Freeing malloc visualizer...{reset}\n");
+	g_alloc.main = 0;
 	ft_memdel((void **)&g_alloc.frame);
 	if (g_alloc.window)
 		glfwDestroyWindow(g_alloc.window);

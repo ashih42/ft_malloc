@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 20:29:19 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 20:49:26 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:20:05 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void			*malloc(size_t size)
 	ret = ft_malloc(size);
 	VERBOSE_PRINT("malloc ( size=%lu ) : %p\n", size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual)
+	if (g_alloc.visual && g_alloc.main)
 		usleep(VISUAL_DELAY);
 	return (ret);
 }
@@ -45,7 +45,7 @@ void			free(void *ptr)
 		VERBOSE_PRINT("  (╯°□°）╯︵ ┻━┻\n");
 	}
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual)
+	if (g_alloc.visual && g_alloc.main)
 		usleep(VISUAL_DELAY);
 }
 
@@ -60,7 +60,7 @@ void			*calloc(size_t count, size_t size)
 	VERBOSE_PRINT("calloc ( count=%lu , size=%lu ) : ret\n",
 		count, size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual)
+	if (g_alloc.visual && g_alloc.main)
 		usleep(VISUAL_DELAY);
 	return (ret);
 }
@@ -76,7 +76,7 @@ void			*realloc(void *ptr, size_t size)
 	ft_free(ptr);
 	VERBOSE_PRINT("realloc ( ptr=%p , size=%lu ) : ret\n", ptr, size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
-	if (g_alloc.visual)
+	if (g_alloc.visual && g_alloc.main)
 		usleep(VISUAL_DELAY);
 	return (ret);
 }

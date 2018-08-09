@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 20:42:28 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:20:02 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ typedef struct		s_alloc
 
 	int				verbose;
 	int				visual;
+	int				main;
 
 	char			*vertex_shader;
 	char			*fragment_shader;
@@ -211,7 +212,7 @@ void				show_alloc_mem_ex(void);
 /*
 ** visualizer.c
 */
-void				free_visualizer(void);
+void				free_visualizer(int silent);
 void				visualize_loop(void);
 
 /*

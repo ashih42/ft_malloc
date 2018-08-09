@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 08:26:40 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 08:55:36 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:09:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void				hexdump(t_block *block)
 	num = block->size;
 	while (num > 0)
 	{
-		hexdump_row(c, (num >= CHARS_PER_ROW) ? CHARS_PER_ROW : num);
-		num = (num >= CHARS_PER_ROW) ? num - CHARS_PER_ROW : 0;
+		hexdump_row(c, (num > CHARS_PER_ROW) ? CHARS_PER_ROW : num);
+		num = (num > CHARS_PER_ROW) ? num - CHARS_PER_ROW : 0;
 		c += CHARS_PER_ROW;
 	}
 }

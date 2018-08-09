@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 08:20:04 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 21:00:01 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/08 22:05:29 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_alloc				g_alloc =
 {
 	{0, 0, 0}, PTHREAD_MUTEX_INITIALIZER, NULL,
-	NULL, 0, 0, 0, 0, 0, NULL, 0, 0,
+	NULL, 0, 0, 0, 0, 0, NULL, 0, 0, 0,
 	"#version 330 core \n"
 	"layout (location = 0) in vec2 aPos; \n"
 	"layout (location = 1) in vec2 aTexCoord; \n"
@@ -48,10 +48,13 @@ PREMAIN_DEF			premain(void)
 	if (g_alloc.visual)
 	{
 		ft_printf("{bold}{red}Now executing main()...{reset}\n");
+		g_alloc.main = 1;
 		pthread_create(&g_alloc.main_prog, NULL, MAIN_PROGRAM, NULL);
 		visualize_loop();
-		free_visualizer();
+		free_visualizer(0);
 		pthread_join(g_alloc.main_prog, NULL);
 		exit(EXIT_SUCCESS);
 	}
+	else
+		free_visualizer(1);
 }
