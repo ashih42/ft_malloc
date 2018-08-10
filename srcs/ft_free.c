@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/10 00:16:51 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/10 05:57:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ static int		free_at_zone(void *ptr, t_zone **head, size_t *size)
 	FREE_ARGS;
 	while (zone)
 	{
+		debug_zone(zone);
+
+
 		if ((void *)zone < ptr && ptr < zone->end)
 		{
 			prev = NULL;
@@ -76,7 +79,7 @@ static int		free_at_zone(void *ptr, t_zone **head, size_t *size)
 					release_zone(head, zone, prev_zone);
 
 
-					debug_zone(zone);		// DEBUG
+//					debug_zone(zone);		// DEBUG
 					return (1);
 				}
 				prev = block;

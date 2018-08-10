@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 21:04:56 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/10 00:08:11 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/10 05:56:10 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void		*find_space(t_zone *zone, size_t size)
 		{
 			debug_block(block, zone);
 
-			if ((void *)block > zone->end) ft_printf("WTF WENT OVER\n");
+			if ((void *)block >= zone->end) ft_printf("WTF WENT OVER\n");
 
 
 
