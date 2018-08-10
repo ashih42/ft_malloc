@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 22:34:51 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/10 00:16:51 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,27 @@
 ** Merge curr with next, and curr with prev, if all are marked FREE
 */
 
-static void		merge(t_block *prev, t_block *curr)
+//static void		merge(t_block *prev, t_block *curr)
+static void		merge(t_block *prev, t_block *curr, t_zone *zone)
 {
 	curr->free = 1;
 	if (curr->next && curr->next->free)
 	{
 		curr->size += sizeof(t_block) + curr->next->size;
 		curr->next = curr->next->next;
+		
+		if (curr->next != NULL && (void *)curr->next >= zone->end) ft_printf("merge() FUCK 1\n");
 	}
 	if (prev && prev->free)
 	{
 		prev->size += sizeof(t_block) + curr->size;
 		prev->next = curr->next;
+
+		if (prev->next != NULL && (void *)prev->next >= zone->end) ft_printf("merge() FUCK 2\n");
 	}
+	
+	
+	
 }
 
 static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
@@ -64,8 +72,11 @@ static int		free_at_zone(void *ptr, t_zone **head, size_t *size)
 				if ((void *)block + sizeof(t_block) == ptr && !block->free)
 				{
 					*size = block->size;
-					merge(prev, block);
+					merge(prev, block, zone);
 					release_zone(head, zone, prev_zone);
+
+
+					debug_zone(zone);		// DEBUG
 					return (1);
 				}
 				prev = block;

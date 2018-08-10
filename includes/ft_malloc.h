@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 22:34:53 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/09 23:51:52 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <GLFW/glfw3.h>
 
 #include <stdio.h> // REMOVE
+#include <assert.h> // REMOVE
 
 // HEY YOU SHOULD REMOVE -fsanitize in MAKEFILE
 
@@ -67,11 +68,14 @@
 */
 # define CHANGE(x, min, max, a, b) (((b)-(a))*((x)-(min))/((max)-(min)))+(a)
 
-# define VERBOSE_PRINT(...)	if (g_alloc.verbose) ft_printf(__VA_ARGS__)
+//# define VERBOSE_PRINT(...)	if (g_alloc.verbose) ft_printf(__VA_ARGS__)
+# define VERBOSE_PRINT(...)	if (1) ft_printf(__VA_ARGS__)
 
 # define KEY_CALLBACK_ARGS int key, int scancode, int action, int mods
 
 # define PREMAIN_DEF void __attribute__ ((constructor))
+
+# define MAIN_DEF int __attribute__ ((weak))
 
 # define FREE_ARGS	t_zone *zone = *head; t_zone *prev_zone = 0; FREE_ARGS_2
 # define FREE_ARGS_2	t_block *prev; t_block *block
@@ -85,7 +89,7 @@ typedef struct		s_vect2i
 }					t_vect2i;
 
 /*
-** sizeof(t_block) = 16
+** sizeof(t_zone) = 16
 */
 typedef struct		s_zone
 {
@@ -136,7 +140,8 @@ typedef struct		s_alloc
 
 extern t_alloc		g_alloc;
 
-int					main();
+void			debug_block(t_block *block, t_zone *zone);
+void			debug_zone(t_zone *zone);
 
 /*
 ** alloc.c

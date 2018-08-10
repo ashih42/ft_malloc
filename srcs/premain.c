@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 08:20:04 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/08 22:05:29 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/09 21:34:33 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,16 @@ t_alloc				g_alloc =
 	"} \n"
 };
 
+MAIN_DEF			main() {}
+
 PREMAIN_DEF			premain(void)
 {
 	g_alloc.verbose = ft_strequ(getenv("MALLOC_VERBOSE"), "1");
 	g_alloc.visual = ft_strequ(getenv("MALLOC_VISUAL"), "1");
+	
+	//ft_printf("premain()\n");
+
+	
 	if (g_alloc.visual)
 	{
 		ft_printf("{bold}{red}Initializing malloc visualizer...{reset}\n");
@@ -49,6 +55,8 @@ PREMAIN_DEF			premain(void)
 	{
 		ft_printf("{bold}{red}Now executing main()...{reset}\n");
 		g_alloc.main = 1;
+
+		//ft_printf("spawning thread for main\n");
 		pthread_create(&g_alloc.main_prog, NULL, MAIN_PROGRAM, NULL);
 		visualize_loop();
 		free_visualizer(0);
@@ -57,4 +65,5 @@ PREMAIN_DEF			premain(void)
 	}
 	else
 		free_visualizer(1);
+		
 }

@@ -4,7 +4,8 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-TARGET = libft_malloc_$(HOSTTYPE).so
+TARGET := asdf_$(HOSTTYPE)
+#TARGET = libft_malloc_$(HOSTTYPE).so
 
 INCLUDES := includes/
 
@@ -19,14 +20,16 @@ LIBFT_LIB := $(LIBFT)libft.a
 GLAD_OBJ := objs/glad.o
 GLAD_INC := glad/include/
 
+CFLAGS := -Wall -Werror -Wextra -g -fsanitize=address 
 HEADERS := -I $(INCLUDES) -I $(LIBFT_INC) -I $(GLFW_INC) -I $(GLAD_INC)
 
-CFLAGS := -Wall -Werror -Wextra #-g -fsanitize=address 
+CFLAGS := -Wall -Werror -Wextra -g -fsanitize=address 
 DLFLAGS := -shared -fPIC
 
 LINK_TARGET := libft_malloc.so
 
-SRCS := alloc.c \
+SRCS := main.c \
+alloc.c \
 draw.c \
 ft_free.c \
 ft_malloc.c \
@@ -71,21 +74,23 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 
 $(TARGET): $(OBJS)
 	@echo "\x1b[1mBuilding $(NAME)...\x1b[0m"
-	#$(CC) -o $(TARGET) $(OBJS) $(GLAD_OBJ) -L$(LIBFT) -lft -lpthread $(GLFW_LINK) $(FRAMEWORKS) -fsanitize=address
-	$(CC) -o $(TARGET) $(OBJS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK) $(FRAMEWORKS) #-fsanitize=address
-	/bin/rm -f $(LINK_TARGET)
-	@ln -s $(TARGET) $(LINK_TARGET)
-	@echo $(LINK_TARGET) is linked to $(TARGET)
+	$(CC) -o $(TARGET) $(OBJS) $(GLAD_OBJ) -L$(LIBFT) -lft -lpthread $(GLFW_LINK) $(FRAMEWORKS) -fsanitize=address
+	#$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread -fsanitize=address
+	#/bin/rm -f $(LINK_TARGET)
+	#@ln -s $(TARGET) $(LINK_TARGET)
+	#@echo $(LINK_TARGET) is linked to $(TARGET)
 
 clean:
 	@echo "\x1b[1mCleaning...\x1b[0m"
 	#make -C $(LIBFT) clean
+	#make -C $(MINILIBX) clean
 	/bin/rm -rf $(OBJDIR)
 	@echo
 
 fclean: clean
 	@echo "\x1b[1mFcleaning...\x1b[0m"
 	#/bin/rm -f $(LIBFT_LIB)
+	#/bin/rm -f $(MLX_LIB)
 	/bin/rm -f $(TARGET)
 	/bin/rm -f $(LINK_TARGET)
 	@echo
