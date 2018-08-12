@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/09 23:51:52 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/11 22:03:25 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@
 /*
 ** 16 + (128 + 24) * 100 < 4 * 4096
 ** 15216 < 16384
+**
+** WITH CHECKSUM
+** 16 + (128 + 32) * 100 < 4 * 4096
+** 16016 < 16384
 */
 # define SMALL_ZONE_SIZE	getpagesize() * 4
 # define SMALL_SIZE_CUTOFF	128
@@ -53,6 +57,10 @@
 /*
 ** 16 + (1024 + 24) * 100 < 26 * 4096
 ** 104816 < 106496
+**
+** WITH CHECKSUM
+** 16 + (1024 + 32) * 100 < 26 * 4096
+** 105616 < 106496
 */
 # define LARGE_ZONE_SIZE	getpagesize() * 26
 # define LARGE_SIZE_CUTOFF	1024
@@ -69,7 +77,7 @@
 # define CHANGE(x, min, max, a, b) (((b)-(a))*((x)-(min))/((max)-(min)))+(a)
 
 //# define VERBOSE_PRINT(...)	if (g_alloc.verbose) ft_printf(__VA_ARGS__)
-# define VERBOSE_PRINT(...)	if (1) ft_printf(__VA_ARGS__)
+# define VERBOSE_PRINT(...)	if (g_alloc.verbose) ft_printf(__VA_ARGS__)
 
 # define KEY_CALLBACK_ARGS int key, int scancode, int action, int mods
 
@@ -99,12 +107,16 @@ typedef struct		s_zone
 
 /*
 ** sizeof(t_block) = 24
+**
+** WITH CHECKSUM
+** sizeof(t_block) = 32
 */
 typedef struct		s_block
 {
 	size_t			size;
 	int				free;
 	struct s_block	*next;
+	size_t			checksum;
 }					t_block;
 
 enum				e_zone
@@ -140,8 +152,6 @@ typedef struct		s_alloc
 
 extern t_alloc		g_alloc;
 
-void			debug_block(t_block *block, t_zone *zone);
-void			debug_zone(t_zone *zone);
 
 /*
 ** alloc.c
@@ -152,11 +162,24 @@ void				*calloc(size_t count, size_t size);
 void				*realloc(void *ptr, size_t size);
 
 /*
+** debug.c
+*/
+void				check_checksum(t_block *block);
+void				debug_block(t_block *block, t_zone *zone);
+void				debug_zone(t_zone *zone);
+void				debug_all_zones(t_zone *zone);
+
+/*
 ** draw.c
 */
 void				draw_line_vert(t_vect2i pos, int len, int color);
 void				draw_box(t_vect2i upper_left, t_vect2i dimen, int color);
 void				draw_sq(t_vect2i pos, t_vect2i dimen, int color);
+
+/*
+** ft_find_size.c
+*/
+int					ft_find_size(void *ptr, size_t *size);
 
 /*
 ** ft_free.c

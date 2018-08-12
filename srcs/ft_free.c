@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/10 05:57:01 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/11 21:59:37 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,28 @@
 ** Merge curr with next, and curr with prev, if all are marked FREE
 */
 
-//static void		merge(t_block *prev, t_block *curr)
-static void		merge(t_block *prev, t_block *curr, t_zone *zone)
+static void		merge(t_block *prev, t_block *curr)
 {
 	curr->free = 1;
 	if (curr->next && curr->next->free)
 	{
 		curr->size += sizeof(t_block) + curr->next->size;
 		curr->next = curr->next->next;
-		
-		if (curr->next != NULL && (void *)curr->next >= zone->end) ft_printf("merge() FUCK 1\n");
+		curr->checksum = (size_t)curr;
 	}
 	if (prev && prev->free)
 	{
 		prev->size += sizeof(t_block) + curr->size;
 		prev->next = curr->next;
-
-		if (prev->next != NULL && (void *)prev->next >= zone->end) ft_printf("merge() FUCK 2\n");
+		prev->checksum = (size_t)prev;
 	}
-	
-	
-	
 }
 
 static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 {
 	t_block		*block;
+	char		*str;
+	size_t		size;
 
 	block = (void *)zone + sizeof(t_zone);
 	while (block)
@@ -55,7 +51,13 @@ static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 		prev->next = zone->next;
 	else
 		*head = zone->next;
-	munmap(zone, (size_t)(zone->end - (void *)zone));
+	size = (size_t)(zone->end - (void *)zone);
+	str = "LARGE";
+	str = (size == (size_t)SMALL_ZONE_SIZE) ? "TINY" : str;
+	str = (size == (size_t)LARGE_ZONE_SIZE) ? "SMALL" : str;
+	VERBOSE_PRINT("  {red}munmap : %s zone at %p ( size=%lu ){reset}\n",
+		str, zone, size);
+	munmap(zone, size);
 }
 
 static int		free_at_zone(void *ptr, t_zone **head, size_t *size)
@@ -63,23 +65,18 @@ static int		free_at_zone(void *ptr, t_zone **head, size_t *size)
 	FREE_ARGS;
 	while (zone)
 	{
-		debug_zone(zone);
-
-
 		if ((void *)zone < ptr && ptr < zone->end)
 		{
 			prev = NULL;
 			block = (void *)zone + sizeof(t_zone);
 			while (block)
 			{
+				check_checksum(block);
 				if ((void *)block + sizeof(t_block) == ptr && !block->free)
 				{
 					*size = block->size;
-					merge(prev, block, zone);
+					merge(prev, block);
 					release_zone(head, zone, prev_zone);
-
-
-//					debug_zone(zone);		// DEBUG
 					return (1);
 				}
 				prev = block;
@@ -103,8 +100,12 @@ static int		free_at_large_zone(void *ptr, t_zone **head, size_t *size)
 	while (zone)
 	{
 		block = (void *)zone + sizeof(t_zone);
+		check_checksum(block);
 		if ((void *)block + sizeof(t_block) == ptr)
+		{
+			block->free = 1;
 			break ;
+		}
 		prev = zone;
 		zone = zone->next;
 	}
@@ -118,13 +119,12 @@ static int		free_at_large_zone(void *ptr, t_zone **head, size_t *size)
 /*
 ** Return 1 if ptr is found and freed successfully
 ** Return 0 if ptr is not found
-** Return -1 if ptr is NULL
 */
 
 int				ft_free(void *ptr, size_t *size)
 {
 	if (!ptr)
-		return (-1);
+		return (0);
 	else if (free_at_zone(ptr, &g_alloc.zone[TINY], size) ||
 		free_at_zone(ptr, &g_alloc.zone[SMALL], size) ||
 		free_at_large_zone(ptr, &g_alloc.zone[LARGE], size))

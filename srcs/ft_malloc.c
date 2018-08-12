@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 21:04:56 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/10 05:56:10 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/11 22:10:07 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void		init_next_block(t_zone *zone, t_block *block)
 		next->size = zone->end - ((void *)next + sizeof(t_block));
 		next->free = 1;
 		next->next = NULL;
+		next->checksum = (size_t)next;
 	}
 	else if (block->next && (void *)next + sizeof(t_block) <
 		(void *)block->next)
@@ -35,12 +36,9 @@ static void		init_next_block(t_zone *zone, t_block *block)
 		next->size = (void *)block->next - ((void *)next + sizeof(t_block));
 		next->free = 1;
 		next->next = block->next;
+		next->checksum = (size_t)next;
 		block->next = next;
-
-		assert( (void *)block->next < zone->end );
 	}
-
-	
 }
 
 static void		*find_space(t_zone *zone, size_t size)
@@ -50,27 +48,15 @@ static void		*find_space(t_zone *zone, size_t size)
 	while (zone)
 	{
 		block = (void *)zone + sizeof(t_zone);
-		ft_printf("\t\t find_space() 2\n");
 		while (block)
 		{
-			debug_block(block, zone);
-
-			if ((void *)block >= zone->end) ft_printf("WTF WENT OVER\n");
-
-
-
+			check_checksum(block);
 			if (block->free && size <= block->size)
 			{
-				block->free = 0;
 				block->size = size;
+				block->free = 0;
+				block->checksum = (size_t)block;
 				init_next_block(zone, block);
-
-				ft_printf("\t OK FOUND block: ");
-				debug_block(block, zone);
-				
-				ft_printf("\t AND ITS NEXT block: ");
-				debug_block(block->next, zone);
-
 				return ((void *)block + sizeof(t_block));
 			}
 			block = block->next;

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 19:28:00 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/09 22:26:52 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/11 22:07:49 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,24 @@ void			*new_zone(size_t size)
 {
 	t_zone		*zone;
 	t_block		*block;
+	char		*str;
 
-	VERBOSE_PRINT("  new_zone ( size=%lu )\n", size);
 	zone = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0);
 	if (zone == (void *)-1)
 		return (NULL);
+	str = "LARGE";
+	str = (size == (size_t)SMALL_ZONE_SIZE) ? "TINY" : str;
+	str = (size == (size_t)LARGE_ZONE_SIZE) ? "SMALL" : str;
+	VERBOSE_PRINT("  {green}mmap : %s zone at %p ( size=%lu ){reset}\n",
+		str, zone, size);
 	zone->next = NULL;
 	zone->end = (void *)zone + size;
 	block = (void *)zone + sizeof(t_zone);
 	block->size = size - sizeof(t_zone) - sizeof(t_block);
 	block->free = 1;
 	block->next = NULL;
+	block->checksum = (size_t)block;
 	return (zone);
 }
 
@@ -44,7 +50,7 @@ void			*new_zone(size_t size)
 
 void			*add_zone(t_zone **head, t_zone *z)
 {
-	if (!z || !head)
+	if (!head || !z)
 		return (NULL);
 	if (!*head)
 		*head = z;

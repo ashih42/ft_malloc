@@ -5,6 +5,7 @@ ifeq ($(HOSTTYPE),)
 endif
 
 TARGET = libft_malloc_$(HOSTTYPE).so
+TARGET_VIS = libft_malloc_vis$(HOSTTYPE).so
 
 INCLUDES := includes/
 
@@ -19,39 +20,47 @@ LIBFT_LIB := $(LIBFT)libft.a
 GLAD_OBJ := objs/glad.o
 GLAD_INC := glad/include/
 
+
 HEADERS := -I $(INCLUDES) -I $(LIBFT_INC) -I $(GLFW_INC) -I $(GLAD_INC)
 
-CFLAGS := -Wall -Werror -Wextra #-g -fsanitize=address 
-DLFLAGS := -shared -fPIC
+CFLAGS := -Wall -Werror -Wextra -fPIC #-g -fsanitize=address 
+DLFLAGS := -shared 
 
 LINK_TARGET := libft_malloc.so
 
 SRCS := alloc.c \
-draw.c \
+debug.c \
+ft_find_size.c \
 ft_free.c \
 ft_malloc.c \
+hexdump.c \
+zone.c \
+
+SRCS_VIS := alloc.c \
+debug.c \
+ft_find_size.c \
+ft_free.c \
+ft_malloc.c \
+hexdump.c \
+zone.c \
+premain.c \
 gl_callback.c \
 gl_init.c \
 gl_init_shader.c \
-hexdump.c \
-premain.c \
+draw.c \
 render.c \
 show_alloc_mem.c \
-visualizer.c \
-zone.c
+visualizer.c
+
 
 SRCDIR := srcs/
 OBJDIR := objs/
 OBJS := $(addprefix $(OBJDIR), $(SRCS:.c=.o))
+OBJS_VIS := $(addprefix $(OBJDIR), $(SRCS_VIS:.c=.o))
 
-FRAMEWORKS := -framework OpenGl
+all: $(LIBFT_LIB) $(TARGET)
 
-all: glfw $(LIBFT_LIB) $(GLAD_OBJ) $(TARGET)
-
-glfw:
-	@echo "\x1b[1mInstalling glfw...\x1b[0m"
-	@HOMEBREW_NO_AUTO_UPDATE=1 brew install glfw
-	@echo
+vis: $(LIBFT_LIB) $(GLAD_OBJ) $(TARGET_VIS)
 
 $(LIBFT_LIB):
 	@echo "\x1b[1mBuilding $(LIBFT) library...\x1b[0m"
@@ -71,11 +80,17 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 
 $(TARGET): $(OBJS)
 	@echo "\x1b[1mBuilding $(NAME)...\x1b[0m"
-	#$(CC) -o $(TARGET) $(OBJS) $(GLAD_OBJ) -L$(LIBFT) -lft -lpthread $(GLFW_LINK) $(FRAMEWORKS) -fsanitize=address
-	$(CC) -o $(TARGET) $(OBJS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK) $(FRAMEWORKS) #-fsanitize=address
+	$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread -framework OpenGl
 	/bin/rm -f $(LINK_TARGET)
 	@ln -s $(TARGET) $(LINK_TARGET)
 	@echo $(LINK_TARGET) is linked to $(TARGET)
+
+$(TARGET_VIS): $(OBJS_VIS)
+	@echo "\x1b[1mBuilding $(NAME)...\x1b[0m"
+	$(CC) -o $(TARGET_VIS) $(OBJS_VIS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK)
+	/bin/rm -f $(LINK_TARGET)
+	@ln -s $(TARGET_VIS) $(LINK_TARGET)
+	@echo $(LINK_TARGET) is linked to $(TARGET_VIS)
 
 clean:
 	@echo "\x1b[1mCleaning...\x1b[0m"
@@ -86,10 +101,9 @@ clean:
 fclean: clean
 	@echo "\x1b[1mFcleaning...\x1b[0m"
 	#/bin/rm -f $(LIBFT_LIB)
-	/bin/rm -f $(TARGET)
-	/bin/rm -f $(LINK_TARGET)
+	/bin/rm -f $(TARGET) $(TARGET_VIS) $(LINK_TARGET)
 	@echo
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re vis
