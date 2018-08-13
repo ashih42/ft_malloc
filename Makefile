@@ -12,6 +12,8 @@ INCLUDES := includes/
 GLFW_LOC := $(shell brew --prefix glfw)
 GLFW_INC := $(GLFW_LOC)/include/
 GLFW_LINK := -L $(GLFW_LOC)/lib/ -lglfw
+#GLFW_LINK := -L $(GLFW_LOC)/lib/ -Wl -Bstatic -lglfw
+#GLFW_LINK := -L $(GLFW_LOC)/lib/ -l:glfw
 
 LIBFT := libft/
 LIBFT_INC := $(LIBFT)includes/
@@ -80,7 +82,7 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 
 $(TARGET): $(OBJS)
 	@echo "\x1b[1mBuilding $(NAME)...\x1b[0m"
-	$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread -framework OpenGl
+	$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread
 	/bin/rm -f $(LINK_TARGET)
 	@ln -s $(TARGET) $(LINK_TARGET)
 	@echo $(LINK_TARGET) is linked to $(TARGET)

@@ -10,7 +10,7 @@
 void	show_alloc_mem(void);
 void	show_alloc_mem_ex(void);
 
-# define ARR_SIZE 200
+# define ARR_SIZE 10
 
 int			main(void)
 {
@@ -29,16 +29,11 @@ int			main(void)
 		array_tiny[i] = malloc(sizeof(char) * 128);
 		array_small[i] = malloc(sizeof(char) * 1024);
 	}
+//	char *ptr = array_tiny[0] - 1;
+//	*ptr = 'a';
 
-	//array_tiny[107] = malloc(sizeof(char) * 80);
-
-	// array_tiny[0][0] = 'A';
-	// array_tiny[0][1] = 'B';
-	// array_tiny[0][2] = '1';
-	// array_tiny[0][3] = '2';
-	// array_tiny[0][4] = 'z';
 	
-	show_alloc_mem();
+//	show_alloc_mem();
 	//show_alloc_mem_ex();
 
 	sleep(2);

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 20:29:19 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/12 00:31:00 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/12 20:18:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,25 +80,25 @@ void			free(void *ptr)
 		ft_printf(" free END\n");
 }
 
-// void			*calloc(size_t count, size_t size)
-// {
-// 	void		*ret;
+void			*calloc(size_t count, size_t size)
+{
+	void		*ret;
 
-// 		ft_printf("calloc START\n");
+		ft_printf("calloc START\n");
 
-// 	pthread_mutex_lock(&g_alloc.mutex);
-// 	ret = ft_malloc(count * size);
-// 	if (ret)
-// 		ft_bzero(ret, count * size);
-// 	VERBOSE_PRINT("calloc ( count=%lu , size=%lu ) : %p\n",
-// 		count, size, ret);
-// 	pthread_mutex_unlock(&g_alloc.mutex);
-// 	VIS_DELAY;
+	pthread_mutex_lock(&g_alloc.mutex);
+	ret = ft_malloc(count * size);
+	if (ret)
+		ft_bzero(ret, count * size);
+	VERBOSE_PRINT("calloc ( count=%lu , size=%lu ) : %p\n",
+		count, size, ret);
+	pthread_mutex_unlock(&g_alloc.mutex);
+	VIS_DELAY;
 
-// 		ft_printf("calloc END\n");
+		ft_printf("calloc END\n");
 	
-// 	return (ret);
-// }
+	return (ret);
+}
 
 
 
