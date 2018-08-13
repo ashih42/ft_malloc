@@ -50,3 +50,44 @@ int				ft_find_size(void *ptr, size_t *size)
 	else
 		return (0);
 }
+
+
+static int		find_block_at_zone(void *ptr, t_zone **head, t_block **b, t_zone **z)
+{
+	FREE_ARGS;
+	while (zone)
+	{
+		if ((void *)zone < ptr && ptr < zone->end)
+		{
+			prev = NULL;
+			block = (void *)zone + sizeof(t_zone);
+			while (block)
+			{
+				check_checksum(block);
+				if ((void *)block + sizeof(t_block) == ptr)
+				{
+					*z = zone;
+					*b = block;
+					return (1);
+				}
+				prev = block;
+				block = block->next;
+			}
+		}
+		prev_zone = zone;
+		zone = zone->next;
+	}
+	return (0);
+}
+
+int				ft_find_block(void *ptr, t_block **b, t_zone **z)
+{
+	if (!ptr)
+		return (0);
+	else if (find_block_at_zone(ptr, &g_alloc.zone[TINY], b, z) ||
+		find_block_at_zone(ptr, &g_alloc.zone[SMALL], b, z) ||
+		find_block_at_zone(ptr, &g_alloc.zone[LARGE], b, z))
+		return (1);
+	else
+		return (0);
+}

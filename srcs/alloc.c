@@ -49,19 +49,21 @@ void			*malloc(size_t size)
 	pthread_mutex_unlock(&g_alloc.mutex);
 	VIS_DELAY;
 
-		// debug_all_zones(g_alloc.zone[1]);
 		ft_printf(" malloc END\n");
+		//debug_all_zones();
+
+		if (!ret) ft_printf("MALLOC RETURNED ZERO\n");
 
 	return (ret);
 }
 
 void			free(void *ptr)
 {
+	return ;
 	int			ret;
 	size_t		size;
 
 		ft_printf("free START\n");
-		// debug_all_zones(g_alloc.zone[1]);
 
 	pthread_mutex_lock(&g_alloc.mutex);
 	VERBOSE_PRINT("free ( ptr=%p )", ptr);
@@ -78,6 +80,7 @@ void			free(void *ptr)
 	VIS_DELAY;
 	
 		ft_printf(" free END\n");
+		//debug_all_zones();
 }
 
 void			*calloc(size_t count, size_t size)
@@ -96,31 +99,72 @@ void			*calloc(size_t count, size_t size)
 	VIS_DELAY;
 
 		ft_printf("calloc END\n");
-	
+		//debug_all_zones();
+		if (!ret) ft_printf("CALLOC RETURNED ZERO\n");
 	return (ret);
 }
 
+/*
+// THIS ONE SHRINKS AN EXISTING BLOCK WITHOUT MALLOCING NEW ONE
+void			*realloc(void *ptr, size_t size)
+{
+	void		*ret;
+	t_block		*ptr_block;
+	t_zone		*ptr_zone;
+	size_t		ptr_size;
 
+		ft_printf("realloc START\n");
 
+	pthread_mutex_lock(&g_alloc.mutex);
+	ret = NULL;
+	if (!ptr)
+		ret = ft_malloc(size);
+	else if (ft_find_block(ptr, &ptr_block, &ptr_zone))
+	{
+		if (size < ptr_block->size)
+		{
+			ptr_block->size = size;
+			ptr_block->checksum = (size_t)ptr_block + ptr_block->size;
+
+			// INIT NEW BLOCK HERE, AND THEN TRY TO MERGE(DEFRAG)
+		}
+		else if ((ret = ft_malloc(size)))
+		{
+			ft_memcpy(ret, ptr, MIN(ptr_block->size, size));
+			ft_free(ptr, &ptr_size);
+		}
+	}
+	VERBOSE_PRINT("realloc ( ptr=%p , size=%lu ) : %p\n", ptr, size, ret);
+	pthread_mutex_unlock(&g_alloc.mutex);
+	VIS_DELAY;
+		
+		ft_printf("realloc END\n");
+	return (ret);
+}
+*/
 
 void			*realloc(void *ptr, size_t size)
 {
-	int			find_success;
 	void		*ret;
 	size_t		ptr_size;
 
 		ft_printf("realloc START\n");
 
 	pthread_mutex_lock(&g_alloc.mutex);
-	ret = ft_malloc(size);
-	find_success = ft_find_size(ptr, &ptr_size);
-	if (ret && ptr && find_success)
+	ret = NULL;
+	if (!ptr)
+		ret = ft_malloc(size);
+	else if (ft_find_size(ptr, &ptr_size) && (ret = ft_malloc(size)))
+	{
 		ft_memcpy(ret, ptr, MIN(ptr_size, size));
-	ft_free(ptr, &ptr_size);
+		ft_free(ptr, &ptr_size);
+	}
 	VERBOSE_PRINT("realloc ( ptr=%p , size=%lu ) : %p\n", ptr, size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
 	VIS_DELAY;
 		
 		ft_printf("realloc END\n");
+		//debug_all_zones();
+		if (!ret) ft_printf("REALLOC RETURNED ZERO\n");
 	return (ret);
 }

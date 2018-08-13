@@ -38,7 +38,7 @@ void			*new_zone(size_t size)
 	block->size = size - sizeof(t_zone) - sizeof(t_block);
 	block->free = 1;
 	block->next = NULL;
-	block->checksum = (size_t)block;
+	block->checksum = (size_t)block + block->size;
 	return (zone);
 }
 

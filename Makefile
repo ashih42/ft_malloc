@@ -22,7 +22,6 @@ LIBFT_LIB := $(LIBFT)libft.a
 GLAD_OBJ := objs/glad.o
 GLAD_INC := glad/include/
 
-
 HEADERS := -I $(INCLUDES) -I $(LIBFT_INC) -I $(GLFW_INC) -I $(GLAD_INC)
 
 CFLAGS := -Wall -Werror -Wextra -fPIC #-g -fsanitize=address 
@@ -36,33 +35,31 @@ ft_find_size.c \
 ft_free.c \
 ft_malloc.c \
 hexdump.c \
+show_alloc_mem.c \
 zone.c \
 
-SRCS_VIS := alloc.c \
-debug.c \
-ft_find_size.c \
-ft_free.c \
-ft_malloc.c \
-hexdump.c \
-zone.c \
+SRCS_VIS := $(SRCS) \
 premain.c \
 gl_callback.c \
 gl_init.c \
 gl_init_shader.c \
 draw.c \
 render.c \
-show_alloc_mem.c \
 visualizer.c
-
 
 SRCDIR := srcs/
 OBJDIR := objs/
 OBJS := $(addprefix $(OBJDIR), $(SRCS:.c=.o))
 OBJS_VIS := $(addprefix $(OBJDIR), $(SRCS_VIS:.c=.o))
 
-all: $(LIBFT_LIB) $(TARGET)
+all: glfw $(LIBFT_LIB) $(TARGET)
 
-vis: $(LIBFT_LIB) $(GLAD_OBJ) $(TARGET_VIS)
+vis: glfw $(LIBFT_LIB) $(GLAD_OBJ) $(TARGET_VIS)
+
+glfw:
+	@echo "\x1b[1mInstalling glfw...\x1b[0m"
+	@HOMEBREW_NO_AUTO_UPDATE=1 brew install glfw
+	@echo
 
 $(LIBFT_LIB):
 	@echo "\x1b[1mBuilding $(LIBFT) library...\x1b[0m"

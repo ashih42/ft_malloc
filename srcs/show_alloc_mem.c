@@ -19,6 +19,7 @@ static void			print_blocks(t_block *block, int ex_mode)
 	j = 0;
 	while (block)
 	{
+		check_checksum(block);
 		ft_printf("    BLOCK %d: %p - %p : %lu bytes, free = %s\n", j++,
 			(void *)block + sizeof(t_block),
 			(void *)block + sizeof(t_block) + block->size,

@@ -5,3 +5,4 @@
 *.pdf
 *.txt
 *_Darwin
+._.DS_Store

@@ -16,7 +16,6 @@
 # include "libft.h"
 # include <sys/mman.h>
 # include <pthread.h>
-# include <mach/thread_act.h>
 # include <glad/glad.h>
 # include <GLFW/glfw3.h>
 
@@ -44,10 +43,6 @@
 # define CHARS_PER_ROW		16
 
 /*
-** 16 + (128 + 24) * 100 < 4 * 4096
-** 15216 < 16384
-**
-** WITH CHECKSUM
 ** 16 + (128 + 32) * 100 < 4 * 4096
 ** 16016 < 16384
 */
@@ -55,10 +50,6 @@
 # define SMALL_SIZE_CUTOFF	128
 
 /*
-** 16 + (1024 + 24) * 100 < 26 * 4096
-** 104816 < 106496
-**
-** WITH CHECKSUM
 ** 16 + (1024 + 32) * 100 < 26 * 4096
 ** 105616 < 106496
 */
@@ -76,7 +67,6 @@
 */
 # define CHANGE(x, min, max, a, b) (((b)-(a))*((x)-(min))/((max)-(min)))+(a)
 
-//# define VERBOSE_PRINT(...)	if (g_alloc.verbose) ft_printf(__VA_ARGS__)
 # define VERBOSE_PRINT(...)	if (g_alloc.verbose) ft_printf(__VA_ARGS__)
 
 # define KEY_CALLBACK_ARGS int key, int scancode, int action, int mods
@@ -106,9 +96,6 @@ typedef struct		s_zone
 }					t_zone;
 
 /*
-** sizeof(t_block) = 24
-**
-** WITH CHECKSUM
 ** sizeof(t_block) = 32
 */
 typedef struct		s_block
@@ -152,7 +139,6 @@ typedef struct		s_alloc
 
 extern t_alloc		g_alloc;
 
-
 /*
 ** alloc.c
 */
@@ -167,7 +153,8 @@ void				*realloc(void *ptr, size_t size);
 void				check_checksum(t_block *block);
 void				debug_block(t_block *block, t_zone *zone);
 void				debug_zone(t_zone *zone);
-void				debug_all_zones(t_zone *zone);
+void				debug_zone_list(t_zone *zone);
+void				debug_all_zones(void);
 
 /*
 ** draw.c
@@ -180,6 +167,8 @@ void				draw_sq(t_vect2i pos, t_vect2i dimen, int color);
 ** ft_find_size.c
 */
 int					ft_find_size(void *ptr, size_t *size);
+int					ft_find_block(void *ptr, t_block **b, t_zone **z);
+
 
 /*
 ** ft_free.c

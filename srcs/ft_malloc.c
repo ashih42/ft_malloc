@@ -28,7 +28,7 @@ static void		init_next_block(t_zone *zone, t_block *block)
 		next->size = zone->end - ((void *)next + sizeof(t_block));
 		next->free = 1;
 		next->next = NULL;
-		next->checksum = (size_t)next;
+		next->checksum = (size_t)next + next->size;
 	}
 	else if (block->next && (void *)next + sizeof(t_block) <
 		(void *)block->next)
@@ -36,7 +36,7 @@ static void		init_next_block(t_zone *zone, t_block *block)
 		next->size = (void *)block->next - ((void *)next + sizeof(t_block));
 		next->free = 1;
 		next->next = block->next;
-		next->checksum = (size_t)next;
+		next->checksum = (size_t)next + next->size;
 		block->next = next;
 	}
 }
@@ -55,7 +55,7 @@ static void		*find_space(t_zone *zone, size_t size)
 			{
 				block->size = size;
 				block->free = 0;
-				block->checksum = (size_t)block;
+				block->checksum = (size_t)block + block->size;
 				init_next_block(zone, block);
 				return ((void *)block + sizeof(t_block));
 			}

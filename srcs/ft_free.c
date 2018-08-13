@@ -24,13 +24,13 @@ static void		merge(t_block *prev, t_block *curr)
 	{
 		curr->size += sizeof(t_block) + curr->next->size;
 		curr->next = curr->next->next;
-		curr->checksum = (size_t)curr;
+		curr->checksum = (size_t)curr + curr->size;
 	}
 	if (prev && prev->free)
 	{
 		prev->size += sizeof(t_block) + curr->size;
 		prev->next = curr->next;
-		prev->checksum = (size_t)prev;
+		prev->checksum = (size_t)prev + prev->size;
 	}
 }
 
