@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 19:28:00 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/12 20:38:09 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/14 02:10:25 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ void			*new_zone(size_t size)
 	t_block		*block;
 	char		*str;
 
-	zone = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS,
-		-1, 0);
-	if (zone == (void *)-1)
+	if ((zone = mmap(0, size, PROT_READ | PROT_WRITE,
+		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == MAP_FAILED)
 		return (NULL);
 	str = "LARGE";
 	str = (size == (size_t)SMALL_ZONE_SIZE) ? "TINY" : str;

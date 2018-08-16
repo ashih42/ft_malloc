@@ -11,7 +11,7 @@ void	show_alloc_mem(void);
 void	show_alloc_mem_ex(void);
 int		ft_printf(const char *format, ...);
 
-# define ARR_SIZE 10
+# define ARR_SIZE 200
 
 int			main(void)
 {

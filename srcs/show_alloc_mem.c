@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 05:45:40 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/09 22:26:23 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/16 08:44:44 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void			print_blocks(t_block *block, int ex_mode)
 	while (block)
 	{
 		check_checksum(block);
-		ft_printf("    BLOCK %d: %p - %p : %lu bytes, free = %s\n", j++,
+		ft_printf("\tBLOCK %d: %p - %p : %lu bytes, free = %s\n", j++,
 			(void *)block + sizeof(t_block),
 			(void *)block + sizeof(t_block) + block->size,
 			block->size, block->free ? "YES" : "NO");

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 21:04:56 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/12 20:38:24 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/14 01:48:54 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** Case (2): block is NOT the last block in this zone
 */
 
-static void		init_next_block(t_zone *zone, t_block *block)
+void			init_next_block(t_zone *zone, t_block *block)
 {
 	t_block		*next;
 

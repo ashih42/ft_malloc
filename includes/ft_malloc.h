@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/11 22:03:25 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/16 08:29:05 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
 # include <pthread.h>
 # include <glad/glad.h>
 # include <GLFW/glfw3.h>
-
-#include <stdio.h> // REMOVE
-#include <assert.h> // REMOVE
-
-// HEY YOU SHOULD REMOVE -fsanitize in MAKEFILE
 
 # define FRAME_WIDTH		1000
 # define FRAME_HEIGHT		10
@@ -77,6 +72,8 @@
 
 # define FREE_ARGS	t_zone *zone = *head; t_zone *prev_zone = 0; FREE_ARGS_2
 # define FREE_ARGS_2	t_block *prev; t_block *block
+
+# define R_ARGS void *ret = 0; t_block *block; t_zone *zone; size_t ptr_size
 
 # define VIS_DELAY if (g_alloc.visual && g_alloc.main) usleep(100000)
 
@@ -164,11 +161,9 @@ void				draw_box(t_vect2i upper_left, t_vect2i dimen, int color);
 void				draw_sq(t_vect2i pos, t_vect2i dimen, int color);
 
 /*
-** ft_find_size.c
+** find_block.c
 */
-int					ft_find_size(void *ptr, size_t *size);
-int					ft_find_block(void *ptr, t_block **b, t_zone **z);
-
+int					find_block(void *ptr, t_block **b, t_zone **z);
 
 /*
 ** ft_free.c
@@ -178,7 +173,13 @@ int					ft_free(void *ptr, size_t *size);
 /*
 ** ft_malloc.c
 */
+void				init_next_block(t_zone *zone, t_block *block);
 void				*ft_malloc(size_t size);
+
+/*
+** ft_realloc.c
+*/
+void				shrink_block(size_t size, t_block *block, t_zone *zone);
 
 /*
 ** gl_init.c

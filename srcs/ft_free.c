@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/11 21:59:37 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/16 08:21:21 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 	str = "LARGE";
 	str = (size == (size_t)SMALL_ZONE_SIZE) ? "TINY" : str;
 	str = (size == (size_t)LARGE_ZONE_SIZE) ? "SMALL" : str;
-	VERBOSE_PRINT("  {red}munmap : %s zone at %p ( size=%lu ){reset}\n",
+	VERBOSE_PRINT("  {blue}munmap : %s zone at %p ( size=%lu ){reset}\n",
 		str, zone, size);
 	munmap(zone, size);
 }

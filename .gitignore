@@ -1,8 +1,10 @@
 .DS_Store
+._.DS_Store
 *.o
 *.a
 *.dSYM
 *.pdf
 *.txt
 *_Darwin
-._.DS_Store
+*.log
+*.so

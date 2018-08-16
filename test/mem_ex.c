@@ -1,46 +1,49 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <stdio.h>
 #include <time.h>
-
 
 # define SWAP(a, b, T)		{T temp = a; a = b; b = temp;}
 
 void	show_alloc_mem(void);
 void	show_alloc_mem_ex(void);
+int		ft_printf(const char *format, ...);
 
-# define ARR_SIZE 10
+# define ARR_SIZE 5
+
+// I recommend disabling visualizer, so you don't get a hexdump of the huge frame buffer
 
 int			main(void)
 {
 	srand(time(NULL));
 	
-	
-	char *array_large[ARR_SIZE];
+	char *array_tiny[ARR_SIZE];
 
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
-		array_large[i] = malloc(sizeof(char) * 2000);
+		ft_printf("%d\n", i);
+		array_tiny[i] = malloc(sizeof(char) * 42);
+		strcpy(array_tiny[i], "GOOD MORNING, FRIENDS!");
 	}
 
-
-	show_alloc_mem();
-	//show_alloc_mem_ex();
+	show_alloc_mem_ex();
 
 	sleep(2);
 
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
 		int j = rand() % ARR_SIZE;
-		SWAP(array_large[i], array_large[j], char *);
+		SWAP(array_tiny[i], array_tiny[j], char *);
 	}
 
 	for (int i = 0; i < ARR_SIZE; i++)
 	{
-		free(array_large[i]);
+		ft_printf("%d\n", i);
+		free(array_tiny[i]);
 	}
-	
+
 	return (0);
 }
 

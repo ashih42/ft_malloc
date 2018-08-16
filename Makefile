@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ashih <ashih@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/08/14 05:57:17 by ashih             #+#    #+#              #
+#    Updated: 2018/08/16 08:36:58 by ashih            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC := gcc
 
 ifeq ($(HOSTTYPE),)
@@ -11,9 +23,10 @@ INCLUDES := includes/
 
 GLFW_LOC := $(shell brew --prefix glfw)
 GLFW_INC := $(GLFW_LOC)/include/
+
 GLFW_LINK := -L $(GLFW_LOC)/lib/ -lglfw
 #GLFW_LINK := -L $(GLFW_LOC)/lib/ -Wl -Bstatic -lglfw
-#GLFW_LINK := -L $(GLFW_LOC)/lib/ -l:glfw
+
 
 LIBFT := libft/
 LIBFT_INC := $(LIBFT)includes/
@@ -24,16 +37,17 @@ GLAD_INC := glad/include/
 
 HEADERS := -I $(INCLUDES) -I $(LIBFT_INC) -I $(GLFW_INC) -I $(GLAD_INC)
 
-CFLAGS := -Wall -Werror -Wextra -fPIC #-g -fsanitize=address 
-DLFLAGS := -shared 
+CFLAGS := -Wall -Werror -Wextra -fPIC # -g -fsanitize=address 
+DLFLAGS := -shared -fPIC
 
 LINK_TARGET := libft_malloc.so
 
 SRCS := alloc.c \
 debug.c \
-ft_find_size.c \
+find_block.c \
 ft_free.c \
 ft_malloc.c \
+ft_realloc.c \
 hexdump.c \
 show_alloc_mem.c \
 zone.c \
@@ -78,15 +92,15 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 	$(CC) -c $(CFLAGS) $(HEADERS) $< -o $@
 
 $(TARGET): $(OBJS)
-	@echo "\x1b[1mBuilding $(NAME)...\x1b[0m"
-	$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread
+	@echo "\x1b[1mBuilding $(TARGET)...\x1b[0m"
+	$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread # -g -fsanitize=address
 	/bin/rm -f $(LINK_TARGET)
 	@ln -s $(TARGET) $(LINK_TARGET)
 	@echo $(LINK_TARGET) is linked to $(TARGET)
 
 $(TARGET_VIS): $(OBJS_VIS)
-	@echo "\x1b[1mBuilding $(NAME)...\x1b[0m"
-	$(CC) -o $(TARGET_VIS) $(OBJS_VIS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK)
+	@echo "\x1b[1mBuilding $(TARGET_VIS)...\x1b[0m"
+	$(CC) -o $(TARGET_VIS) $(OBJS_VIS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK) # -g -fsanitize=address
 	/bin/rm -f $(LINK_TARGET)
 	@ln -s $(TARGET_VIS) $(LINK_TARGET)
 	@echo $(LINK_TARGET) is linked to $(TARGET_VIS)
