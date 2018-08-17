@@ -3,7 +3,6 @@
 
 int main() 
 {
-	write(1, "MAIN 1\n", 7);
 	int i;
 	char *addr;
 
@@ -12,6 +11,5 @@ int main()
 	{
 		i++;
 	}
-	write(1, "MAIN 2\n", 7);
 	return (0);
 }
