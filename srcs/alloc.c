@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 20:29:19 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/16 08:48:42 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/16 20:30:46 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ void			free(void *ptr)
 
 	pthread_mutex_lock(&g_alloc.mutex);
 	VERBOSE_PRINT("free ( ptr=%p )", ptr);
-	if (ft_free(ptr, &size))
+	if (!ptr)
+	{
+		VERBOSE_PRINT(" No operation!\n");
+	}
+	else if (ft_free(ptr, &size))
 	{
 		VERBOSE_PRINT(" Success! ( Released %lu bytes )\n", size);
 	}

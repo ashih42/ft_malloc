@@ -6,7 +6,7 @@
 #    By: ashih <ashih@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/14 05:57:17 by ashih             #+#    #+#              #
-#    Updated: 2018/08/16 08:36:58 by ashih            ###   ########.fr        #
+#    Updated: 2018/08/16 20:32:12 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,6 @@ GLFW_INC := $(GLFW_LOC)/include/
 
 GLFW_LINK := -L $(GLFW_LOC)/lib/ -lglfw
 #GLFW_LINK := -L $(GLFW_LOC)/lib/ -Wl -Bstatic -lglfw
-
 
 LIBFT := libft/
 LIBFT_INC := $(LIBFT)includes/
