@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 20:34:55 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/16 20:23:48 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/16 21:08:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 static void		merge(t_block *prev, t_block *curr)
 {
-	curr->free = 1;
 	if (curr->next && curr->next->free)
 	{
 		curr->size += sizeof(t_block) + curr->next->size;
@@ -60,60 +59,49 @@ static void		release_zone(t_zone **head, t_zone *zone, t_zone *prev)
 	munmap(zone, size);
 }
 
-static int		free_at_zone(void *ptr, t_zone **head, size_t *size)
+static int		free_block_chain(t_block *block, void *ptr, size_t *size)
 {
-	FREE_ARGS;
-	while (zone)
+	t_block		*prev;
+
+	prev = NULL;
+	while (block)
 	{
-		if ((void *)zone < ptr && ptr < zone->end)
+		if ((void *)block + sizeof(t_block) == ptr && !block->free)
 		{
-			prev = NULL;
-			block = (void *)zone + sizeof(t_zone);
-			while (block)
-			{
-				check_checksum(block);
-				if ((void *)block + sizeof(t_block) == ptr && !block->free)
-				{
-					*size = block->size;
-					merge(prev, block);
-					release_zone(head, zone, prev_zone);
-					return (1);
-				}
-				prev = block;
-				block = block->next;
-			}
+			block->free = 1;
+			*size = block->size;
+			merge(prev, block);
+			return (1);
 		}
-		prev_zone = zone;
-		zone = zone->next;
+		prev = block;
+		block = block->next;
 	}
 	return (0);
 }
 
-static int		free_at_large_zone(void *ptr, t_zone **head, size_t *size)
+static int		free_at_zone(t_zone **head, void *ptr, size_t *size)
 {
 	t_zone		*zone;
 	t_zone		*prev;
 	t_block		*block;
 
-	prev = NULL;
 	zone = *head;
+	prev = NULL;
 	while (zone)
 	{
-		block = (void *)zone + sizeof(t_zone);
-		check_checksum(block);
-		if ((void *)block + sizeof(t_block) == ptr)
+		if ((void *)zone < ptr && ptr < zone->end)
 		{
-			block->free = 1;
-			break ;
+			block = (void *)zone + sizeof(t_zone);
+			if (free_block_chain(block, ptr, size))
+			{
+				release_zone(head, zone, prev);
+				return (1);
+			}
 		}
 		prev = zone;
 		zone = zone->next;
 	}
-	if (!zone)
-		return (0);
-	*size = block->size;
-	release_zone(head, zone, prev);
-	return (1);
+	return (0);
 }
 
 /*
@@ -125,9 +113,9 @@ int				ft_free(void *ptr, size_t *size)
 {
 	if (!ptr)
 		return (0);
-	else if (free_at_zone(ptr, &g_alloc.zone[TINY], size) ||
-		free_at_zone(ptr, &g_alloc.zone[SMALL], size) ||
-		free_at_large_zone(ptr, &g_alloc.zone[LARGE], size))
+	else if (free_at_zone(&g_alloc.zone[TINY], ptr, size) ||
+		free_at_zone(&g_alloc.zone[SMALL], ptr, size) ||
+		free_at_zone(&g_alloc.zone[LARGE], ptr, size))
 		return (1);
 	else
 		return (0);

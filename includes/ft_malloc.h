@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 07:38:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/16 08:29:05 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/16 21:18:05 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,6 @@
 # define PREMAIN_DEF void __attribute__ ((constructor))
 
 # define MAIN_DEF int __attribute__ ((weak))
-
-# define FREE_ARGS	t_zone *zone = *head; t_zone *prev_zone = 0; FREE_ARGS_2
-# define FREE_ARGS_2	t_block *prev; t_block *block
-
-# define R_ARGS void *ret = 0; t_block *block; t_zone *zone; size_t ptr_size
 
 # define VIS_DELAY if (g_alloc.visual && g_alloc.main) usleep(100000)
 
@@ -163,7 +158,7 @@ void				draw_sq(t_vect2i pos, t_vect2i dimen, int color);
 /*
 ** find_block.c
 */
-int					find_block(void *ptr, t_block **b, t_zone **z);
+int					find_block_zone(void *ptr, t_block **b, t_zone **z);
 
 /*
 ** ft_free.c
@@ -179,7 +174,7 @@ void				*ft_malloc(size_t size);
 /*
 ** ft_realloc.c
 */
-void				shrink_block(size_t size, t_block *block, t_zone *zone);
+void				*ft_realloc(void *ptr, size_t size);
 
 /*
 ** gl_init.c

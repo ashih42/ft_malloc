@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 20:29:19 by ashih             #+#    #+#             */
-/*   Updated: 2018/08/16 20:30:46 by ashih            ###   ########.fr       */
+/*   Updated: 2018/08/16 21:18:32 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,25 +88,10 @@ void			*calloc(size_t count, size_t size)
 
 void			*realloc(void *ptr, size_t size)
 {
-	R_ARGS;
+	void		*ret;
+
 	pthread_mutex_lock(&g_alloc.mutex);
-	if (!ptr)
-		ret = ft_malloc(size);
-	else if (find_block(ptr, &block, &zone))
-	{
-		if (size == 0)
-			ft_free(ptr, &ptr_size);
-		else if (size <= block->size)
-		{
-			shrink_block(size, block, zone);
-			ret = ptr;
-		}
-		else if ((ret = ft_malloc(size)))
-		{
-			ft_memcpy(ret, ptr, MIN(block->size, size));
-			ft_free(ptr, &ptr_size);
-		}
-	}
+	ret = ft_realloc(ptr, size);
 	VERBOSE_PRINT("realloc ( ptr=%p , size=%lu ) : %p\n", ptr, size, ret);
 	pthread_mutex_unlock(&g_alloc.mutex);
 	VIS_DELAY;
