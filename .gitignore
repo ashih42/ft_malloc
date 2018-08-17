@@ -4,7 +4,6 @@
 *.a
 *.dSYM
 *.pdf
-*.txt
 *_Darwin
 *.log
 *.so
