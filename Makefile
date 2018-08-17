@@ -6,7 +6,7 @@
 #    By: ashih <ashih@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/14 05:57:17 by ashih             #+#    #+#              #
-#    Updated: 2018/08/16 20:32:12 by ashih            ###   ########.fr        #
+#    Updated: 2018/08/16 21:53:29 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,6 @@ GLFW_LOC := $(shell brew --prefix glfw)
 GLFW_INC := $(GLFW_LOC)/include/
 
 GLFW_LINK := -L $(GLFW_LOC)/lib/ -lglfw
-#GLFW_LINK := -L $(GLFW_LOC)/lib/ -Wl -Bstatic -lglfw
 
 LIBFT := libft/
 LIBFT_INC := $(LIBFT)includes/
@@ -36,7 +35,7 @@ GLAD_INC := glad/include/
 
 HEADERS := -I $(INCLUDES) -I $(LIBFT_INC) -I $(GLFW_INC) -I $(GLAD_INC)
 
-CFLAGS := -Wall -Werror -Wextra -fPIC # -g -fsanitize=address 
+CFLAGS := -Wall -Werror -Wextra -fPIC
 DLFLAGS := -shared -fPIC
 
 LINK_TARGET := libft_malloc.so
@@ -92,27 +91,27 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 
 $(TARGET): $(OBJS)
 	@echo "\x1b[1mBuilding $(TARGET)...\x1b[0m"
-	$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread # -g -fsanitize=address
+	$(CC) -o $(TARGET) $(OBJS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread
 	/bin/rm -f $(LINK_TARGET)
 	@ln -s $(TARGET) $(LINK_TARGET)
 	@echo $(LINK_TARGET) is linked to $(TARGET)
 
 $(TARGET_VIS): $(OBJS_VIS)
 	@echo "\x1b[1mBuilding $(TARGET_VIS)...\x1b[0m"
-	$(CC) -o $(TARGET_VIS) $(OBJS_VIS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK) # -g -fsanitize=address
+	$(CC) -o $(TARGET_VIS) $(OBJS_VIS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK)
 	/bin/rm -f $(LINK_TARGET)
 	@ln -s $(TARGET_VIS) $(LINK_TARGET)
 	@echo $(LINK_TARGET) is linked to $(TARGET_VIS)
 
 clean:
 	@echo "\x1b[1mCleaning...\x1b[0m"
-	#make -C $(LIBFT) clean
+	make -C $(LIBFT) clean
 	/bin/rm -rf $(OBJDIR)
 	@echo
 
 fclean: clean
 	@echo "\x1b[1mFcleaning...\x1b[0m"
-	#/bin/rm -f $(LIBFT_LIB)
+	/bin/rm -f $(LIBFT_LIB)
 	/bin/rm -f $(TARGET) $(TARGET_VIS) $(LINK_TARGET)
 	@echo
 
