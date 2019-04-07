@@ -1,5 +1,5 @@
 # ft_malloc
-My own dynamic memory manager in C, with OpenGL visualizer. (42 silicon valley)
+My own [dynamic memory manager](https://en.wikipedia.org/wiki/C_dynamic_memory_allocation) in C, with OpenGL visualizer. (42 silicon valley)
 
 ![visualizer](https://github.com/ashih42/ft_malloc/blob/master/Screenshots/visualizer.png)
 
