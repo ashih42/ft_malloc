@@ -1,11 +1,9 @@
 .DS_Store
-._.DS_Store
+._*
 *.o
 *.a
 *.dSYM
-*.pdf
 *_Darwin
 *.log
 *.so
 a.out
-*.out
