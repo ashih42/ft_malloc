@@ -23,17 +23,17 @@ INCLUDES := includes/
 
 GLFW_LOC := $(shell brew --prefix glfw)
 GLFW_INC := $(GLFW_LOC)/include/
-
 GLFW_LINK := -L $(GLFW_LOC)/lib/ -lglfw
+
+GLEW_LOC := $(shell brew --prefix glew)
+GLEW_INC := $(GLEW_LOC)/include/
+GLEW_LINK := -L $(GLEW_LOC)/lib/ -lGLEW
 
 LIBFT := libft/
 LIBFT_INC := $(LIBFT)includes/
 LIBFT_LIB := $(LIBFT)libft.a
 
-GLAD_OBJ := objs/glad.o
-GLAD_INC := glad/include/
-
-HEADERS := -I $(INCLUDES) -I $(LIBFT_INC) -I $(GLFW_INC) -I $(GLAD_INC)
+HEADERS := -I $(INCLUDES) -I $(LIBFT_INC) -I $(GLFW_INC) -I $(GLEW_INC)
 
 CFLAGS := -Wall -Werror -Wextra -fPIC
 DLFLAGS := -shared -fPIC
@@ -64,25 +64,15 @@ OBJDIR := objs/
 OBJS := $(addprefix $(OBJDIR), $(SRCS:.c=.o))
 OBJS_VIS := $(addprefix $(OBJDIR), $(SRCS_VIS:.c=.o))
 
-all: glfw $(LIBFT_LIB) $(TARGET)
+no_vis: $(LIBFT_LIB) $(TARGET)
+	@echo "Build complete (no visualizer)"
 
-vis: glfw $(LIBFT_LIB) $(GLAD_OBJ) $(TARGET_VIS)
-
-glfw:
-	@echo "\x1b[1mInstalling glfw...\x1b[0m"
-	@HOMEBREW_NO_AUTO_UPDATE=1 brew install glfw
-	@echo
+vis: $(LIBFT_LIB) $(TARGET_VIS)
+	@echo "Build complete (with visualizer)"
 
 $(LIBFT_LIB):
 	@echo "\x1b[1mBuilding $(LIBFT) library...\x1b[0m"
 	@make -C $(LIBFT)
-	@echo
-
-$(GLAD_OBJ):
-	@echo "\x1b[1mBuilding glad.o...\x1b[0m"
-	@gcc glad/src/glad.c -c -I $(GLAD_INC)
-	@mkdir -p $(OBJDIR)
-	@mv glad.o $(OBJDIR)
 	@echo
 
 $(OBJDIR)%.o: $(SRCDIR)%.c
@@ -98,7 +88,8 @@ $(TARGET): $(OBJS)
 
 $(TARGET_VIS): $(OBJS_VIS)
 	@echo "\x1b[1mBuilding $(TARGET_VIS)...\x1b[0m"
-	$(CC) -o $(TARGET_VIS) $(OBJS_VIS) $(GLAD_OBJ) $(DLFLAGS) -L$(LIBFT) -lft -lpthread $(GLFW_LINK)
+	$(CC) -o $(TARGET_VIS) $(OBJS_VIS) $(DLFLAGS) -L$(LIBFT) -lft -lpthread \
+		$(GLFW_LINK) $(GLEW_LINK) -framework OpenGL
 	/bin/rm -f $(LINK_TARGET)
 	@ln -s $(TARGET_VIS) $(LINK_TARGET)
 	@echo $(LINK_TARGET) is linked to $(TARGET_VIS)
@@ -115,6 +106,6 @@ fclean: clean
 	/bin/rm -f $(TARGET) $(TARGET_VIS) $(LINK_TARGET)
 	@echo
 
-re: fclean all
+re: fclean no_vis
 
-.PHONY: all clean fclean re vis
+.PHONY: no_vis vis clean fclean re

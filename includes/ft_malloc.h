@@ -16,7 +16,7 @@
 # include "libft.h"
 # include <sys/mman.h>
 # include <pthread.h>
-# include <glad/glad.h>
+# include <GL/glew.h>
 # include <GLFW/glfw3.h>
 
 # define FRAME_WIDTH		1000
