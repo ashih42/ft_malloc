@@ -5,9 +5,13 @@ My own [dynamic memory manager](https://en.wikipedia.org/wiki/C_dynamic_memory_a
 
 These functions are implemented:
 * malloc
-* realloc
 * calloc
+* realloc
 * free
+
+These functions can be used to inspect blocks of memory:
+* show_alloc_mem
+* show_alloc_mem_ex
 
 ## Prerequisites
 
