@@ -16,13 +16,15 @@ You are on macOS with `gcc`, `make`, and `brew` installed.
 ## Compiling the Shared Library
 
 Build without visualizer
+
 ```
-make all
+./setup.sh no_vis
 ```
 
 Build with visualizer
+
 ```
-make vis
+./setup.sh vis
 ```
 
 ## Linking the Shared Library
