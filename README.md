@@ -17,7 +17,7 @@ These functions can be used to inspect blocks of memory:
 
 You are on macOS with `gcc`, `make`, and `brew` installed.
 
-## Compiling the Shared Library
+## Compiling
 
 Build without visualizer
 
@@ -31,8 +31,9 @@ Build with visualizer
 ./setup.sh vis
 ```
 
-## Linking the Shared Library
+## Linking
 
+Link the shared library `libft_malloc.so` with `gcc`
 ```
 gcc *.c -L. -lft_malloc
 ```
