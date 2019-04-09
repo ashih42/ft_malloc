@@ -33,7 +33,7 @@ Build with visualizer
 
 ## Linking
 
-Link the shared library `libft_malloc.so` with `gcc`
+Link dynamic library `libft_malloc.so` with `gcc`
 ```
 gcc *.c -L. -lft_malloc
 ```
